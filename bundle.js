@@ -86,6 +86,168 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./components/BuildDeck.js":
+/*!*********************************!*\
+  !*** ./components/BuildDeck.js ***!
+  \*********************************/
+/*! exports provided: BuildDeck */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BuildDeck", function() { return BuildDeck; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+ // import * as cardsJSON from '../cards.json';
+// const cardsArray = cardsJSON["default"]; // side effect of import
+
+var cardsArray = [];
+var cardsHash = {};
+
+for (var i = 0; i < cardsArray.length; i++) {
+  cardsHash[cardsArray[i]["name"]] = cardsArray[i]["id"];
+}
+
+var BuildDeck = function BuildDeck() {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      searchTerm = _useState2[0],
+      setSearchTerm = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      deckName = _useState4[0],
+      setDeckName = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      currentDeck = _useState6[0],
+      setCurrentDeck = _useState6[1];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState8 = _slicedToArray(_useState7, 2),
+      decks = _useState8[0],
+      setDecks = _useState8[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    console.log('cardsArray: ', cardsArray);
+    console.log('cardsHash: ', cardsHash);
+  }, []);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {// console.log('searchTerm: ', searchTerm);
+  }, [searchTerm]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {// console.log('deckName: ', deckName);
+  }, [deckName]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    console.log('currentDeck: ', currentDeck);
+  }, [currentDeck]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    console.log('decks: ', decks);
+  }, [decks]);
+
+  var changeSearchTerm = function changeSearchTerm(event) {
+    setSearchTerm(event.target.value);
+  };
+
+  var changeDeckName = function changeDeckName(event) {
+    setDeckName(event.target.value);
+  };
+
+  var search = function search(event) {
+    event.preventDefault();
+    console.log('submitted: ', searchTerm);
+    var formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
+    console.log('cleaned: ', formatted);
+
+    if (cardsHash[formatted] !== undefined) {
+      setCurrentDeck(currentDeck.concat([cardsHash[formatted]])); // do not mutate
+    }
+
+    setSearchTerm('');
+  };
+
+  var saveDeck = function saveDeck(event) {
+    event.preventDefault();
+    console.log('currentDeck: ', currentDeck); // if (currentDeck.length === 9 || currentDeck.length === 10) {
+
+    setDecks(decks.concat([[deckName, currentDeck]]));
+    setDeckName('');
+    setCurrentDeck([]); // }
+  };
+
+  var removeCard = function removeCard(event) {
+    setCurrentDeck(currentDeck.slice(0, parseInt(event.target.id)).concat(currentDeck.slice(parseInt(event.target.id) + 1)));
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+    onSubmit: search
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "search-term"
+  }, "Search: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    id: "search-term",
+    value: searchTerm,
+    onChange: changeSearchTerm
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "submit"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+    onSubmit: saveDeck
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "deck-name"
+  }, "Deck Name: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    id: "deck-name",
+    value: deckName,
+    onChange: changeDeckName
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "submit"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Card count: ", currentDeck.length), currentDeck.map(function (cardID, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: cardID
+    }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      type: "button",
+      id: index,
+      onClick: removeCard
+    }, "x"));
+  }));
+};
+
+/***/ }),
+
+/***/ "./components/index.js":
+/*!*****************************!*\
+  !*** ./components/index.js ***!
+  \*****************************/
+/*! exports provided: App */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "App", function() { return App; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _BuildDeck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BuildDeck */ "./components/BuildDeck.js");
+
+
+var App = function App() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BuildDeck__WEBPACK_IMPORTED_MODULE_1__["BuildDeck"], {
+    className: "outline"
+  });
+};
+
+/***/ }),
+
 /***/ "./index.js":
 /*!******************!*\
   !*** ./index.js ***!
@@ -99,9 +261,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components */ "./components/index.js");
 
 
-react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Test"), document.getElementById('app'));
+
+react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components__WEBPACK_IMPORTED_MODULE_2__["App"], null), document.getElementById('app'));
 
 /***/ }),
 
