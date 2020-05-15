@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react';
-// import * as cardsJSON from '../cards.json';
-// const cardsArray = cardsJSON["default"]; // side effect of import
-const cardsArray = [];
-const cardsHash = {};
-for (let i = 0; i < cardsArray.length; i++) {
-  cardsHash[cardsArray[i]["name"]] = cardsArray[i]["id"];
-}
 
-export const BuildDeck = () => {
+export const BuildDeck = (props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [deckName, setDeckName] = useState('');
   const [currentDeck, setCurrentDeck] = useState([]);
   const [decks, setDecks] = useState([]);
 
   useEffect(() => {
-    console.log('cardsArray: ', cardsArray);
-    console.log('cardsHash: ', cardsHash);
+    console.log('cardsArray: ', props.cardsArray);
+    console.log('cardsHash: ', props.cardsHash);
   }, []);
 
   useEffect(() => {
@@ -44,11 +37,13 @@ export const BuildDeck = () => {
 
   const search = (event) => {
     event.preventDefault();
+    console.log('event.target:', event.target['search-term'].value);
+    const searchTerm = event.target['search-term'].value; // autocomplete does not trigger onChange
     console.log('submitted: ', searchTerm);
     const formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
     console.log('cleaned: ', formatted);
-    if (cardsHash[formatted] !== undefined) {
-      setCurrentDeck(currentDeck.concat([cardsHash[formatted]])) // do not mutate
+    if (props.cardsHash[formatted] !== undefined) {
+      setCurrentDeck(currentDeck.concat([props.cardsHash[formatted]])) // do not mutate
     }
     setSearchTerm('');
   };
@@ -86,7 +81,7 @@ export const BuildDeck = () => {
       <div>Card count: {currentDeck.length}</div>
       {currentDeck.map((cardID, index) => {
       return (<div key={cardID}>
-        {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
+        {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
         <button type='button' id={index} onClick={removeCard}>x</button>
       </div>)})}
     </div>
