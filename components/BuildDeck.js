@@ -4,7 +4,6 @@ export const BuildDeck = (props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [deckName, setDeckName] = useState('');
   const [currentDeck, setCurrentDeck] = useState([]);
-  const [decks, setDecks] = useState([]);
 
   useEffect(() => {
     console.log('cardsArray: ', props.cardsArray);
@@ -22,10 +21,6 @@ export const BuildDeck = (props) => {
   useEffect(() => {
     console.log('currentDeck: ', currentDeck);
   }, [currentDeck]);
-
-  useEffect(() => {
-    console.log('decks: ', decks);
-  }, [decks]);
 
   const changeSearchTerm = (event) => {
     setSearchTerm(event.target.value);
@@ -52,7 +47,7 @@ export const BuildDeck = (props) => {
     event.preventDefault();
     console.log('currentDeck: ', currentDeck);
     // if (currentDeck.length === 9 || currentDeck.length === 10) {
-      setDecks(decks.concat([[deckName, currentDeck]]));
+      props.setDecks(props.decks.concat([[deckName, currentDeck]]));
       setDeckName('');
       setCurrentDeck([]);
     // }
@@ -67,7 +62,7 @@ export const BuildDeck = (props) => {
   }
 
   return (
-    <div>
+    <div className='outline'>
       <form onSubmit={search}>
         <label htmlFor='search-term'>Search: </label>
         <input type='text' id='search-term' value={searchTerm} onChange={changeSearchTerm} />
