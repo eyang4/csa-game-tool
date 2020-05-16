@@ -8,6 +8,7 @@ export const BattleView = (props) => {
   const [playerDiscard, setPlayerDiscard] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [opponentDeck, setOpponentDeck] = useState([]);
+  const [opponentDiscard, setOpponentDiscard] = useState([]);
 
   useEffect(() => {
     console.log('activeDeck: ', activeDeck);
