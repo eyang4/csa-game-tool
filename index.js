@@ -17,7 +17,7 @@ ReactDOM.render(
   document.getElementById('app')
 );
 
-$( "#search-term" ).autocomplete({
+$('.search-term').autocomplete({
   source: autocompleteSource,
   autoFocus: true
 });

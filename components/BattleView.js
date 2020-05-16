@@ -63,7 +63,7 @@ export const BattleView = (props) => {
         Add opponent cards
         <form onSubmit={search}>
           <label htmlFor='search-term'>Search: </label>
-          <input type='text' id='search-term' value={searchTerm} onChange={changeSearchTerm} />
+          <input type='text' class='search-term' value={searchTerm} onChange={changeSearchTerm} />
           <input type='submit' />
         </form>
       </div>
