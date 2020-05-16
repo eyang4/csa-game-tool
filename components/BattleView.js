@@ -63,54 +63,54 @@ export const BattleView = (props) => {
         Add opponent cards
         <form onSubmit={search}>
           <label htmlFor='search-term'>Search: </label>
-          <input type='text' class='search-term' value={searchTerm} onChange={changeSearchTerm} />
+          <input type='text' className='searchTerm' id='search-term' value={searchTerm} onChange={changeSearchTerm} />
           <input type='submit' />
         </form>
       </div>
       <div className='outline'>
-        <span className='outline'>
+        <div className='outline'>
           Opponent deck
           {(opponentDeck.length > 0)
           ? opponentDeck.map((cardID, index) => {
-              return (<div>
+              return (<div className='wrap' key={cardID}>
                 {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
                 <button type='button' id={index} onClick={removeCard}>x</button>
                 </div>);
             })
           : ''}
-        </span>
-        <span className='outline'>
+        </div>
+        <div className='outline'>
           Opponent discard
           {(opponentDiscard.length > 0)
           ? opponentDiscard.map((cardID, index) => {
-              return (<div>
+              return (<div key={cardID}>
                 {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
                 </div>);
             })
           : ''}
-        </span>
+        </div>
       </div>
       <div className='outline'>
-        <span className='outline'>
+        <div className='outline'>
           Player deck
           {(activeDeck !== -1)
           ? playerDeck.map((cardID, index) => {
-              return (<div>
+              return (<div key={cardID}>
                 {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
                 </div>);
             })
           : ''}
-        </span>
-        <span className='outline'>
+        </div>
+        <div className='outline'>
           Player discard
           {(playerDiscard.length > 0)
           ? playerDiscard.map((cardID, index) => {
-              return (<div>
+              return (<div key={cardID}>
                 {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
                 </div>);
             })
           : ''}
-        </span>
+        </div>
       </div>
     </div>
   );

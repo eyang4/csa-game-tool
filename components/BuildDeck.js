@@ -65,7 +65,7 @@ export const BuildDeck = (props) => {
     <div className='outline'>
       <form onSubmit={search}>
         <label htmlFor='search-term'>Search: </label>
-        <input type='text' class='search-term' value={searchTerm} onChange={changeSearchTerm} />
+        <input type='text' className='searchTerm' id='search-term' value={searchTerm} onChange={changeSearchTerm} />
         <input type='submit' />
       </form>
       <form onSubmit={saveDeck}>
