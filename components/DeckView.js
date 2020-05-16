@@ -4,6 +4,7 @@ export const DeckView = (props) => {
 
   return (
     <div className='outline'>
+      Decklist
       {props.decks.map((deck, index) => {
       return (<div key={deck[0]}>
         <div>

@@ -4,7 +4,7 @@ import {App} from './components';
 
 // import * as cardsJSON from '../cards.json';
 // const cardsArray = cardsJSON["default"]; // side effect of import
-import cardsArray from './cards.json';
+import {cardsArray} from './cardsArray.js';
 const cardsHash = {};
 const autocompleteSource = [];
 for (let i = 0; i < cardsArray.length; i++) {
