@@ -13,7 +13,7 @@ export const DeckView = (props) => {
         </div>
         <div>
           {deck[1].map((cardID, index) => {
-            return (<div>
+            return (<div key={cardID}>
               {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
               </div>);
           })}
