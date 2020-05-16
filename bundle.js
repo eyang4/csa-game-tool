@@ -86,6 +86,161 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./components/BattleView.js":
+/*!**********************************!*\
+  !*** ./components/BattleView.js ***!
+  \**********************************/
+/*! exports provided: BattleView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BattleView", function() { return BattleView; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+// TODO: modularize into components
+
+var BattleView = function BattleView(props) {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(-1),
+      _useState2 = _slicedToArray(_useState, 2),
+      activeDeck = _useState2[0],
+      setActiveDeck = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      playerDeck = _useState4[0],
+      setPlayerDeck = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      playerDiscard = _useState6[0],
+      setPlayerDiscard = _useState6[1];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState8 = _slicedToArray(_useState7, 2),
+      searchTerm = _useState8[0],
+      setSearchTerm = _useState8[1];
+
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      opponentDeck = _useState10[0],
+      setOpponentDeck = _useState10[1];
+
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState12 = _slicedToArray(_useState11, 2),
+      opponentDiscard = _useState12[0],
+      setOpponentDiscard = _useState12[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    console.log('activeDeck: ', activeDeck);
+    if (activeDeck !== -1) setPlayerDeck(props.decks[activeDeck][1]);
+  }, [activeDeck]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    console.log('opponentDeck: ', opponentDeck);
+  }, [opponentDeck]);
+
+  var selectDeck = function selectDeck(event) {
+    setActiveDeck(event.target.id);
+  };
+
+  var changeSearchTerm = function changeSearchTerm(event) {
+    setSearchTerm(event.target.value);
+  };
+
+  var search = function search(event) {
+    event.preventDefault();
+    console.log('event.target:', event.target['search-term'].value);
+    var searchTerm = event.target['search-term'].value; // autocomplete does not trigger onChange
+
+    console.log('submitted: ', searchTerm);
+    var formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
+    console.log('cleaned: ', formatted);
+
+    if (props.cardsHash[formatted] !== undefined) {
+      setOpponentDeck(opponentDeck.concat([props.cardsHash[formatted]])); // do not mutate
+    }
+
+    setSearchTerm('');
+  };
+
+  var removeCard = function removeCard(event) {
+    setOpponentDeck(opponentDeck.slice(0, parseInt(event.target.id)).concat(opponentDeck.slice(parseInt(event.target.id) + 1)));
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, "Select player deck", props.decks.map(function (deck, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: deck[0]
+    }, deck[0], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      type: "button",
+      id: index,
+      onClick: selectDeck
+    }, "Select"));
+  }), "Selected deck: ", activeDeck !== -1 ? props.decks[activeDeck][0] : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, "Add opponent cards", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+    onSubmit: search
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "search-term"
+  }, "Search: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "text",
+    className: "searchTerm",
+    id: "search-term",
+    value: searchTerm,
+    onChange: changeSearchTerm
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "submit"
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, "Opponent deck", opponentDeck.length > 0 ? opponentDeck.map(function (cardID, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "wrap",
+      key: cardID
+    }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      type: "button",
+      id: index,
+      onClick: removeCard
+    }, "x"));
+  }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, "Opponent discard", opponentDiscard.length > 0 ? opponentDiscard.map(function (cardID, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: cardID
+    }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"]);
+  }) : '')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, "Player deck", activeDeck !== -1 ? playerDeck.map(function (cardID, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: cardID
+    }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"]);
+  }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, "Player discard", playerDiscard.length > 0 ? playerDiscard.map(function (cardID, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: cardID
+    }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"]);
+  }) : '')));
+};
+
+/***/ }),
+
 /***/ "./components/BuildDeck.js":
 /*!*********************************!*\
   !*** ./components/BuildDeck.js ***!
@@ -110,17 +265,8 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
- // import * as cardsJSON from '../cards.json';
-// const cardsArray = cardsJSON["default"]; // side effect of import
 
-var cardsArray = [];
-var cardsHash = {};
-
-for (var i = 0; i < cardsArray.length; i++) {
-  cardsHash[cardsArray[i]["name"]] = cardsArray[i]["id"];
-}
-
-var BuildDeck = function BuildDeck() {
+var BuildDeck = function BuildDeck(props) {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
       searchTerm = _useState2[0],
@@ -136,14 +282,9 @@ var BuildDeck = function BuildDeck() {
       currentDeck = _useState6[0],
       setCurrentDeck = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
-      _useState8 = _slicedToArray(_useState7, 2),
-      decks = _useState8[0],
-      setDecks = _useState8[1];
-
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log('cardsArray: ', cardsArray);
-    console.log('cardsHash: ', cardsHash);
+    console.log('cardsArray: ', props.cardsArray);
+    console.log('cardsHash: ', props.cardsHash);
   }, []);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {// console.log('searchTerm: ', searchTerm);
   }, [searchTerm]);
@@ -152,9 +293,6 @@ var BuildDeck = function BuildDeck() {
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     console.log('currentDeck: ', currentDeck);
   }, [currentDeck]);
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log('decks: ', decks);
-  }, [decks]);
 
   var changeSearchTerm = function changeSearchTerm(event) {
     setSearchTerm(event.target.value);
@@ -166,12 +304,15 @@ var BuildDeck = function BuildDeck() {
 
   var search = function search(event) {
     event.preventDefault();
+    console.log('event.target:', event.target['search-term'].value);
+    var searchTerm = event.target['search-term'].value; // autocomplete does not trigger onChange
+
     console.log('submitted: ', searchTerm);
     var formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
     console.log('cleaned: ', formatted);
 
-    if (cardsHash[formatted] !== undefined) {
-      setCurrentDeck(currentDeck.concat([cardsHash[formatted]])); // do not mutate
+    if (props.cardsHash[formatted] !== undefined) {
+      setCurrentDeck(currentDeck.concat([props.cardsHash[formatted]])); // do not mutate
     }
 
     setSearchTerm('');
@@ -181,7 +322,7 @@ var BuildDeck = function BuildDeck() {
     event.preventDefault();
     console.log('currentDeck: ', currentDeck); // if (currentDeck.length === 9 || currentDeck.length === 10) {
 
-    setDecks(decks.concat([[deckName, currentDeck]]));
+    props.setDecks(props.decks.concat([[deckName, currentDeck]]));
     setDeckName('');
     setCurrentDeck([]); // }
   };
@@ -190,12 +331,15 @@ var BuildDeck = function BuildDeck() {
     setCurrentDeck(currentDeck.slice(0, parseInt(event.target.id)).concat(currentDeck.slice(parseInt(event.target.id) + 1)));
   };
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     onSubmit: search
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "search-term"
   }, "Search: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
+    className: "searchTerm",
     id: "search-term",
     value: searchTerm,
     onChange: changeSearchTerm
@@ -215,11 +359,40 @@ var BuildDeck = function BuildDeck() {
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Card count: ", currentDeck.length), currentDeck.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: cardID
-    }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       type: "button",
       id: index,
       onClick: removeCard
     }, "x"));
+  }));
+};
+
+/***/ }),
+
+/***/ "./components/DeckView.js":
+/*!********************************!*\
+  !*** ./components/DeckView.js ***!
+  \********************************/
+/*! exports provided: DeckView */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeckView", function() { return DeckView; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var DeckView = function DeckView(props) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "outline"
+  }, "Decklist", props.decks.map(function (deck, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: deck[0]
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[0]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[1].map(function (cardID, index) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: cardID
+      }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"]);
+    })));
   }));
 };
 
@@ -238,12 +411,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _BuildDeck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BuildDeck */ "./components/BuildDeck.js");
+/* harmony import */ var _DeckView__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DeckView */ "./components/DeckView.js");
+/* harmony import */ var _BattleView__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./BattleView */ "./components/BattleView.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-var App = function App() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BuildDeck__WEBPACK_IMPORTED_MODULE_1__["BuildDeck"], {
-    className: "outline"
-  });
+
+
+
+var App = function App(props) {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      cardsArray = _useState2[0],
+      setCardsArray = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      cardsHash = _useState4[0],
+      setCardsHash = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      autocompleteSource = _useState6[0],
+      setAutocompleteSource = _useState6[1];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState8 = _slicedToArray(_useState7, 2),
+      decks = _useState8[0],
+      setDecks = _useState8[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    console.log('decks: ', decks);
+  }, [decks]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    var cardsHash = {};
+    var autocompleteSource = [];
+
+    for (var i = 0; i < cardsArray.length; i++) {
+      cardsHash[cardsArray[i]["name"]] = cardsArray[i]["id"];
+      autocompleteSource.push(cardsArray[i]["name"]);
+    }
+
+    setCardsHash(cardsHash);
+    setAutocompleteSource(autocompleteSource);
+    $('.searchTerm').autocomplete({
+      source: autocompleteSource,
+      autoFocus: true
+    });
+  }, [cardsArray]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, cardsArray.length === 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "file",
+    id: "file-selector",
+    onChange: function onChange(event) {
+      var fileList = event.target.files;
+      console.log(fileList);
+      var fileReader = new FileReader();
+      fileReader.addEventListener('load', function (event) {
+        // console.log('logging', event.target.result, JSON.parse(fileReader.result));
+        setCardsArray(JSON.parse(fileReader.result));
+      });
+      fileReader.readAsText(fileList[0]);
+    }
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BuildDeck__WEBPACK_IMPORTED_MODULE_1__["BuildDeck"], {
+    cardsArray: cardsArray,
+    cardsHash: cardsHash,
+    decks: decks,
+    setDecks: setDecks
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeckView__WEBPACK_IMPORTED_MODULE_2__["DeckView"], {
+    cardsArray: cardsArray,
+    cardsHash: cardsHash,
+    decks: decks,
+    setDecks: setDecks
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BattleView__WEBPACK_IMPORTED_MODULE_3__["BattleView"], {
+    cardsArray: cardsArray,
+    cardsHash: cardsHash,
+    decks: decks,
+    setDecks: setDecks
+  })));
 };
 
 /***/ }),
