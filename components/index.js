@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {BuildDeck} from './BuildDeck';
-import {DeckView} from './DeckView';
-import {BattleView} from './BattleView';
+import { BuildDeck } from './BuildDeck';
+import { DeckView } from './DeckView';
+import { BattleView } from './BattleView';
+import { ReactDnd } from './ReactDnd';
 
-export const App = (props) => {
+export const App = () => {
   const [cardsArray, setCardsArray] = useState([]);
   const [cardsHash, setCardsHash] = useState([]);
   const [autocompleteSource, setAutocompleteSource] = useState([]);
@@ -47,6 +48,7 @@ export const App = (props) => {
           <BuildDeck cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
           <DeckView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
           <BattleView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
+          <ReactDnd />
         </div>)}
     </div>
   );

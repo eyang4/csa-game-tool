@@ -1,6 +1,9 @@
 // TODO: modularize into components
 
 import React, { useEffect, useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import Backend from 'react-dnd-html5-backend';
+import { Card } from './Card';
 
 export const BattleView = (props) => {
   const [activeDeck, setActiveDeck] = useState(-1);
@@ -67,29 +70,26 @@ export const BattleView = (props) => {
           <input type='submit' />
         </form>
       </div>
-      <div className='outline'>
+      <DndProvider backend={Backend}>
         <div className='outline'>
-          Opponent deck
-          {(opponentDeck.length > 0)
-          ? opponentDeck.map((cardID, index) => {
-              return (<div className='wrap' key={cardID}>
-                {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
-                <button type='button' id={index} onClick={removeCard}>x</button>
-                </div>);
-            })
-          : ''}
+          <div className='outline'>
+            Opponent deck
+            {(opponentDeck.length > 0)
+            ? opponentDeck.map((cardID, index) => {
+                return (<Card cardID={cardID} union={props.cardsArray[cardID - 1]["union"]} name={props.cardsArray[cardID - 1]["name"]} />);
+              })
+            : ''}
+          </div>
+          <div className='outline'>
+            Opponent discard
+            {(opponentDiscard.length > 0)
+            ? opponentDiscard.map((cardID, index) => {
+                return (<Card cardID={cardID} union={props.cardsArray[cardID - 1]["union"]} name={props.cardsArray[cardID - 1]["name"]} />);
+              })
+            : ''}
+          </div>
         </div>
-        <div className='outline'>
-          Opponent discard
-          {(opponentDiscard.length > 0)
-          ? opponentDiscard.map((cardID, index) => {
-              return (<div key={cardID}>
-                {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
-                </div>);
-            })
-          : ''}
-        </div>
-      </div>
+      </DndProvider>
       <div className='outline'>
         <div className='outline'>
           Player deck
