@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { BuildDeck } from './BuildDeck';
 import { DeckView } from './DeckView';
 import { BattleView } from './BattleView';
-import { ReactDnd } from './ReactDnd';
 
 export const App = () => {
   const [cardsArray, setCardsArray] = useState([]);
@@ -48,7 +47,6 @@ export const App = () => {
           <BuildDeck cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
           <DeckView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
           <BattleView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
-          <ReactDnd />
         </div>)}
     </div>
   );

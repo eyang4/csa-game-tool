@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 import { Card } from './Card';
+import { DiscardList } from './DiscardList';
 
 export const BattleView = (props) => {
   const [activeDeck, setActiveDeck] = useState(-1);
@@ -51,6 +52,12 @@ export const BattleView = (props) => {
       );
   }
 
+  const discard = (index) => {
+    console.log('discarding');
+    setOpponentDiscard(opponentDiscard.concat([opponentDeck[index]]));
+    setOpponentDeck(opponentDeck.slice(0,index).concat(opponentDeck.slice(index + 1)));
+  }
+
   return (
     <div>
       <div className='outline'>
@@ -76,17 +83,13 @@ export const BattleView = (props) => {
             Opponent deck
             {(opponentDeck.length > 0)
             ? opponentDeck.map((cardID, index) => {
-                return (<Card cardID={cardID} union={props.cardsArray[cardID - 1]["union"]} name={props.cardsArray[cardID - 1]["name"]} />);
+                return (<Card cardID={cardID} index={index} union={props.cardsArray[cardID - 1]["union"]} name={props.cardsArray[cardID - 1]["name"]} />);
               })
             : ''}
           </div>
           <div className='outline'>
             Opponent discard
-            {(opponentDiscard.length > 0)
-            ? opponentDiscard.map((cardID, index) => {
-                return (<Card cardID={cardID} union={props.cardsArray[cardID - 1]["union"]} name={props.cardsArray[cardID - 1]["name"]} />);
-              })
-            : ''}
+            <DiscardList opponentDiscard={opponentDiscard} discard={discard} cardsArray={props.cardsArray}/>
           </div>
         </div>
       </DndProvider>
