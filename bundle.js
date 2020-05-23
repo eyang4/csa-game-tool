@@ -156,8 +156,17 @@ var BattleView = function BattleView(_ref) {
     // console.log('activeDeck: ', activeDeck);
     if (activeDeck !== -1) setPlayerDeck(decks[activeDeck][1]);
   }, [activeDeck]); // useEffect(() => {
+  //   console.log('playerDeck: ', playerDeck);
+  // }, [playerDeck]);
+  // useEffect(() => {
+  //   console.log('playerDiscard: ', playerDiscard);
+  // }, [playerDiscard]);
+  // useEffect(() => {
   //   console.log('opponentDeck: ', opponentDeck);
   // }, [opponentDeck]);
+  // useEffect(() => {
+  //   console.log('opponentDiscard: ', opponentDiscard);
+  // }, [opponentDiscard]);
 
   var selectDeck = function selectDeck(event) {
     setActiveDeck(event.target.id);
@@ -165,20 +174,6 @@ var BattleView = function BattleView(_ref) {
 
   var removeCard = function removeCard(event) {
     setOpponentDeck(opponentDeck.slice(0, parseInt(event.target.id)).concat(opponentDeck.slice(parseInt(event.target.id) + 1)));
-  };
-
-  var discard = function discard(index) {
-    console.log('discarding');
-
-    if (opponentDiscard.length === 3) {
-      var moveToDiscard = opponentDeck[index];
-      var returnToDeck = opponentDiscard[0];
-      setOpponentDiscard(opponentDiscard.slice(1).concat([moveToDiscard]));
-      setOpponentDeck([returnToDeck].concat(opponentDeck.slice(0, index).concat(opponentDeck.slice(index + 1))));
-    } else {
-      setOpponentDiscard(opponentDiscard.concat([opponentDeck[index]]));
-      setOpponentDeck(opponentDeck.slice(0, index).concat(opponentDeck.slice(index + 1)));
-    }
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -191,7 +186,7 @@ var BattleView = function BattleView(_ref) {
       id: index,
       onClick: selectDeck
     }, "Select"));
-  }), "Selected deck: ", activeDeck !== -1 ? decks[activeDeck][0] : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Selected deck: ", activeDeck !== -1 ? decks[activeDeck][0] : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, "Add opponent cards", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_1__["Search"], {
     cardsArray: cardsArray,
@@ -208,6 +203,7 @@ var BattleView = function BattleView(_ref) {
     className: "outline"
   }, "Opponent deck", opponentDeck.length > 0 ? opponentDeck.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_4__["Card"], {
+      key: cardID,
       cardID: cardID,
       index: index,
       union: cardsArray[cardID - 1]["union"],
@@ -216,9 +212,11 @@ var BattleView = function BattleView(_ref) {
   }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, "Opponent discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_5__["DiscardList"], {
-    opponentDiscard: opponentDiscard,
-    discard: discard,
-    cardsArray: cardsArray
+    cardsArray: cardsArray,
+    deck: opponentDeck,
+    setDeck: setOpponentDeck,
+    discard: opponentDiscard,
+    setDiscard: setOpponentDiscard
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -468,23 +466,41 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var DiscardList = function DiscardList(_ref) {
   var cardsArray = _ref.cardsArray,
-      opponentDiscard = _ref.opponentDiscard,
-      discard = _ref.discard;
+      deck = _ref.deck,
+      setDeck = _ref.setDeck,
+      discard = _ref.discard,
+      setDiscard = _ref.setDiscard;
 
   var _useDrop = Object(react_dnd__WEBPACK_IMPORTED_MODULE_1__["useDrop"])({
     accept: _ItemTypes__WEBPACK_IMPORTED_MODULE_2__["default"].CARD,
     drop: function drop(item, monitor) {
       console.log('dropped item: ', item);
-      discard(item.index);
+      update(item.index);
     }
   }),
       _useDrop2 = _slicedToArray(_useDrop, 2),
       drop = _useDrop2[1];
 
+  var update = function update(index) {
+    console.log('discarding');
+
+    if (discard.length === 3) {
+      var moveToDiscard = deck[index];
+      var returnToDeck = discard[0];
+      setDiscard(discard.slice(1).concat([moveToDiscard]));
+      setDeck([returnToDeck].concat(deck.slice(0, index).concat(deck.slice(index + 1))));
+    } else {
+      setDiscard(discard.concat([deck[index]]));
+      setDeck(deck.slice(0, index).concat(deck.slice(index + 1)));
+    }
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     ref: drop
-  }, opponentDiscard.length > 0 ? opponentDiscard.map(function (cardID, index) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
+  }, discard.length > 0 ? discard.map(function (cardID, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: cardID
+    }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
   }) : 'Drag here');
 };
 

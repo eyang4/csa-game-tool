@@ -57,7 +57,7 @@ export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
             {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
             <button type='button' id={index} onClick={removeCard}>x</button>
           </div>
-        )
+        );
       })}
     </div>
   );

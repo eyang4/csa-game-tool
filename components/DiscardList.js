@@ -2,21 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import ItemTypes from './ItemTypes';
 
-export const DiscardList = ({ cardsArray, opponentDiscard, discard }) => {
+export const DiscardList = ({ cardsArray, deck, setDeck, discard, setDiscard }) => {
 
   const [, drop] = useDrop({
     accept: ItemTypes.CARD,
     drop(item, monitor) {
       console.log('dropped item: ', item);
-      discard(item.index);
+      update(item.index);
     },
   });
 
+  const update = (index) => {
+    console.log('discarding');
+    if (discard.length === 3) {
+      const moveToDiscard = deck[index];
+      const returnToDeck = discard[0];
+      setDiscard(discard.slice(1).concat([moveToDiscard]));
+      setDeck([returnToDeck].concat(deck.slice(0,index).concat(deck.slice(index + 1))));
+    }
+    else {
+      setDiscard(discard.concat([deck[index]]));
+      setDeck(deck.slice(0,index).concat(deck.slice(index + 1)));
+    }
+  }
+
   return (
     <div ref={drop}>
-      {(opponentDiscard.length > 0)
-      ? opponentDiscard.map((cardID, index) => {
-          return (<div>{cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}</div>);
+      {(discard.length > 0)
+      ? discard.map((cardID, index) => {
+          return (<div key={cardID}>{cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}</div>);
         })
       : 'Drag here'}
     </div>

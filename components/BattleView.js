@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Search } from './Search';
+
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 import { Card } from './Card';
@@ -18,8 +19,20 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
   }, [activeDeck]);
 
   // useEffect(() => {
+  //   console.log('playerDeck: ', playerDeck);
+  // }, [playerDeck]);
+
+  // useEffect(() => {
+  //   console.log('playerDiscard: ', playerDiscard);
+  // }, [playerDiscard]);
+
+  // useEffect(() => {
   //   console.log('opponentDeck: ', opponentDeck);
   // }, [opponentDeck]);
+
+  // useEffect(() => {
+  //   console.log('opponentDiscard: ', opponentDiscard);
+  // }, [opponentDiscard]);
 
   const selectDeck = (event) => {
     setActiveDeck(event.target.id);
@@ -33,29 +46,17 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
       );
   }
 
-  const discard = (index) => {
-    console.log('discarding');
-    if (opponentDiscard.length === 3) {
-      const moveToDiscard = opponentDeck[index];
-      const returnToDeck = opponentDiscard[0];
-      setOpponentDiscard(opponentDiscard.slice(1).concat([moveToDiscard]));
-      setOpponentDeck([returnToDeck].concat(opponentDeck.slice(0,index).concat(opponentDeck.slice(index + 1))));
-    }
-    else {
-      setOpponentDiscard(opponentDiscard.concat([opponentDeck[index]]));
-      setOpponentDeck(opponentDeck.slice(0,index).concat(opponentDeck.slice(index + 1)));
-    }
-  }
-
   return (
     <div>
       <div className='outline'>
         Select player deck
         {decks.map((deck, index) => {
-        return (<div key={deck[0]}>
-          {deck[0]}
-          <button type='button' id={index} onClick={selectDeck}>Select</button>
-        </div>)})}
+          return (<div key={deck[0]}>
+            {deck[0]}
+            <button type='button' id={index} onClick={selectDeck}>Select</button>
+          </div>);
+        })}
+        <br />
         Selected deck: {(activeDeck !== -1) ? decks[activeDeck][0] : ''}
       </div>
       <div className='outline'>
@@ -68,13 +69,13 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
             Opponent deck
             {(opponentDeck.length > 0)
             ? opponentDeck.map((cardID, index) => {
-                return (<Card cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} />);
+                return (<Card key={cardID }cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} />);
               })
             : ''}
           </div>
           <div className='outline'>
             Opponent discard
-            <DiscardList opponentDiscard={opponentDiscard} discard={discard} cardsArray={cardsArray}/>
+            <DiscardList cardsArray={cardsArray} deck={opponentDeck} setDeck={setOpponentDeck} discard={opponentDiscard} setDiscard={setOpponentDiscard} />
           </div>
         </div>
       </DndProvider>
@@ -83,9 +84,11 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
           Player deck
           {(activeDeck !== -1)
           ? playerDeck.map((cardID, index) => {
-              return (<div key={cardID}>
-                {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
-                </div>);
+              return (
+                <div key={cardID}>
+                  {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
+                </div>
+              );
             })
           : ''}
         </div>
@@ -93,9 +96,11 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
           Player discard
           {(playerDiscard.length > 0)
           ? playerDiscard.map((cardID, index) => {
-              return (<div key={cardID}>
-                {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
-                </div>);
+              return (
+                <div key={cardID}>
+                  {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
+                </div>
+              );
             })
           : ''}
         </div>
