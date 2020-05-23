@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { Search } from './Search';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 import { Card } from './Card';
 import { DiscardList } from './DiscardList';
 
-export const BattleView = (props) => {
+export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
   const [activeDeck, setActiveDeck] = useState(-1);
   const [playerDeck, setPlayerDeck] = useState([]);
   const [playerDiscard, setPlayerDiscard] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
   const [opponentDeck, setOpponentDeck] = useState([]);
   const [opponentDiscard, setOpponentDiscard] = useState([]);
 
   useEffect(() => {
     // console.log('activeDeck: ', activeDeck);
-    if (activeDeck !== -1) setPlayerDeck(props.decks[activeDeck][1]);
+    if (activeDeck !== -1) setPlayerDeck(decks[activeDeck][1]);
   }, [activeDeck]);
 
   // useEffect(() => {
@@ -24,23 +24,6 @@ export const BattleView = (props) => {
   const selectDeck = (event) => {
     setActiveDeck(event.target.id);
   }
-
-  const changeSearchTerm = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const search = (event) => {
-    event.preventDefault();
-    console.log('event.target:', event.target['search-term'].value);
-    const searchTerm = event.target['search-term'].value; // autocomplete does not trigger onChange
-    console.log('submitted: ', searchTerm);
-    const formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
-    console.log('cleaned: ', formatted);
-    if (props.cardsHash[formatted] !== undefined) {
-      setOpponentDeck(opponentDeck.concat([props.cardsHash[formatted]])) // do not mutate
-    }
-    setSearchTerm('');
-  };
 
   const removeCard = (event) => {
     setOpponentDeck(
@@ -68,20 +51,16 @@ export const BattleView = (props) => {
     <div>
       <div className='outline'>
         Select player deck
-        {props.decks.map((deck, index) => {
+        {decks.map((deck, index) => {
         return (<div key={deck[0]}>
           {deck[0]}
           <button type='button' id={index} onClick={selectDeck}>Select</button>
         </div>)})}
-        Selected deck: {(activeDeck !== -1) ? props.decks[activeDeck][0] : ''}
+        Selected deck: {(activeDeck !== -1) ? decks[activeDeck][0] : ''}
       </div>
       <div className='outline'>
         Add opponent cards
-        <form onSubmit={search}>
-          <label htmlFor='search-term'>Search: </label>
-          <input type='text' className='searchTerm' id='search-term' value={searchTerm} onChange={changeSearchTerm} />
-          <input type='submit' />
-        </form>
+        <Search cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} getter={opponentDeck} setter={setOpponentDeck} />
       </div>
       <DndProvider backend={Backend}>
         <div className='outline'>
@@ -89,13 +68,13 @@ export const BattleView = (props) => {
             Opponent deck
             {(opponentDeck.length > 0)
             ? opponentDeck.map((cardID, index) => {
-                return (<Card cardID={cardID} index={index} union={props.cardsArray[cardID - 1]["union"]} name={props.cardsArray[cardID - 1]["name"]} />);
+                return (<Card cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} />);
               })
             : ''}
           </div>
           <div className='outline'>
             Opponent discard
-            <DiscardList opponentDiscard={opponentDiscard} discard={discard} cardsArray={props.cardsArray}/>
+            <DiscardList opponentDiscard={opponentDiscard} discard={discard} cardsArray={cardsArray}/>
           </div>
         </div>
       </DndProvider>
@@ -105,7 +84,7 @@ export const BattleView = (props) => {
           {(activeDeck !== -1)
           ? playerDeck.map((cardID, index) => {
               return (<div key={cardID}>
-                {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
+                {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
                 </div>);
             })
           : ''}
@@ -115,7 +94,7 @@ export const BattleView = (props) => {
           {(playerDiscard.length > 0)
           ? playerDiscard.map((cardID, index) => {
               return (<div key={cardID}>
-                {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
+                {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
                 </div>);
             })
           : ''}

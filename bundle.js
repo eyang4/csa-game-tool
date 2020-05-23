@@ -98,10 +98,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BattleView", function() { return BattleView; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/esm/index.js");
-/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/esm/index.js");
-/* harmony import */ var _Card__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Card */ "./components/Card.js");
-/* harmony import */ var _DiscardList__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DiscardList */ "./components/DiscardList.js");
+/* harmony import */ var _Search__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Search */ "./components/Search.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/esm/index.js");
+/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/esm/index.js");
+/* harmony import */ var _Card__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Card */ "./components/Card.js");
+/* harmony import */ var _DiscardList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DiscardList */ "./components/DiscardList.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -119,7 +120,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var BattleView = function BattleView(props) {
+
+var BattleView = function BattleView(_ref) {
+  var cardsArray = _ref.cardsArray,
+      cardsHash = _ref.cardsHash,
+      decks = _ref.decks,
+      setDecks = _ref.setDecks;
+
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(-1),
       _useState2 = _slicedToArray(_useState, 2),
       activeDeck = _useState2[0],
@@ -135,50 +142,25 @@ var BattleView = function BattleView(props) {
       playerDiscard = _useState6[0],
       setPlayerDiscard = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState8 = _slicedToArray(_useState7, 2),
-      searchTerm = _useState8[0],
-      setSearchTerm = _useState8[1];
+      opponentDeck = _useState8[0],
+      setOpponentDeck = _useState8[1];
 
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState10 = _slicedToArray(_useState9, 2),
-      opponentDeck = _useState10[0],
-      setOpponentDeck = _useState10[1];
-
-  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
-      _useState12 = _slicedToArray(_useState11, 2),
-      opponentDiscard = _useState12[0],
-      setOpponentDiscard = _useState12[1];
+      opponentDiscard = _useState10[0],
+      setOpponentDiscard = _useState10[1];
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     // console.log('activeDeck: ', activeDeck);
-    if (activeDeck !== -1) setPlayerDeck(props.decks[activeDeck][1]);
+    if (activeDeck !== -1) setPlayerDeck(decks[activeDeck][1]);
   }, [activeDeck]); // useEffect(() => {
   //   console.log('opponentDeck: ', opponentDeck);
   // }, [opponentDeck]);
 
   var selectDeck = function selectDeck(event) {
     setActiveDeck(event.target.id);
-  };
-
-  var changeSearchTerm = function changeSearchTerm(event) {
-    setSearchTerm(event.target.value);
-  };
-
-  var search = function search(event) {
-    event.preventDefault();
-    console.log('event.target:', event.target['search-term'].value);
-    var searchTerm = event.target['search-term'].value; // autocomplete does not trigger onChange
-
-    console.log('submitted: ', searchTerm);
-    var formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
-    console.log('cleaned: ', formatted);
-
-    if (props.cardsHash[formatted] !== undefined) {
-      setOpponentDeck(opponentDeck.concat([props.cardsHash[formatted]])); // do not mutate
-    }
-
-    setSearchTerm('');
   };
 
   var removeCard = function removeCard(event) {
@@ -201,7 +183,7 @@ var BattleView = function BattleView(props) {
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
-  }, "Select player deck", props.decks.map(function (deck, index) {
+  }, "Select player deck", decks.map(function (deck, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: deck[0]
     }, deck[0], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -209,39 +191,34 @@ var BattleView = function BattleView(props) {
       id: index,
       onClick: selectDeck
     }, "Select"));
-  }), "Selected deck: ", activeDeck !== -1 ? props.decks[activeDeck][0] : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }), "Selected deck: ", activeDeck !== -1 ? decks[activeDeck][0] : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
-  }, "Add opponent cards", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-    onSubmit: search
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "search-term"
-  }, "Search: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "text",
-    className: "searchTerm",
-    id: "search-term",
-    value: searchTerm,
-    onChange: changeSearchTerm
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    type: "submit"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_1__["DndProvider"], {
-    backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_2__["default"]
+  }, "Add opponent cards", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_1__["Search"], {
+    cardsArray: cardsArray,
+    cardsHash: cardsHash,
+    decks: decks,
+    setDecks: setDecks,
+    getter: opponentDeck,
+    setter: setOpponentDeck
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_2__["DndProvider"], {
+    backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_3__["default"]
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, "Opponent deck", opponentDeck.length > 0 ? opponentDeck.map(function (cardID, index) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_3__["Card"], {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_4__["Card"], {
       cardID: cardID,
       index: index,
-      union: props.cardsArray[cardID - 1]["union"],
-      name: props.cardsArray[cardID - 1]["name"]
+      union: cardsArray[cardID - 1]["union"],
+      name: cardsArray[cardID - 1]["name"]
     });
   }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
-  }, "Opponent discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_4__["DiscardList"], {
+  }, "Opponent discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_5__["DiscardList"], {
     opponentDiscard: opponentDiscard,
     discard: discard,
-    cardsArray: props.cardsArray
+    cardsArray: cardsArray
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -249,13 +226,13 @@ var BattleView = function BattleView(props) {
   }, "Player deck", activeDeck !== -1 ? playerDeck.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: cardID
-    }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"]);
+    }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
   }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, "Player discard", playerDiscard.length > 0 ? playerDiscard.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: cardID
-    }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"]);
+    }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
   }) : '')));
 };
 
@@ -294,7 +271,6 @@ var BuildDeck = function BuildDeck(_ref) {
       decks = _ref.decks,
       setDecks = _ref.setDecks;
 
-  // const [searchTerm, setSearchTerm] = useState('');
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
       deckName = _useState2[0],
@@ -308,36 +284,16 @@ var BuildDeck = function BuildDeck(_ref) {
   //   console.log('cardsHash: ', cardsHash);
   // }, []);
   // useEffect(() => {
-  //   console.log('searchTerm: ', searchTerm);
-  // }, [searchTerm]);
-  // useEffect(() => {
   //   console.log('deckName: ', deckName);
   // }, [deckName]);
   // useEffect(() => {
   //   console.log('currentDeck: ', currentDeck);
   // }, [currentDeck]);
-  // const changeSearchTerm = (event) => {
-  //   setSearchTerm(event.target.value);
-  // };
 
 
   var changeDeckName = function changeDeckName(event) {
     setDeckName(event.target.value);
-  }; // const search = (event) => {
-  //   event.preventDefault();
-  //   // console.log('event.target:', event.target['search-term'].value);
-  //   const searchTerm = event.target['search-term'].value; // autocomplete does not trigger onChange
-  //   // console.log('submitted: ', searchTerm);
-  //   const formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
-  //   // console.log('cleaned: ', formatted);
-  //   if (cardsHash[formatted] !== undefined) {
-  //     setCurrentDeck(
-  //       currentDeck.concat([ cardsHash[formatted] ])
-  //     ); // do not mutate
-  //   }
-  //   setSearchTerm('');
-  // };
-
+  };
 
   var saveDeck = function saveDeck(event) {
     event.preventDefault(); // console.log('currentDeck: ', currentDeck);
