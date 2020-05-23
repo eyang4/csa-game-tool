@@ -7,11 +7,8 @@ export const DiscardList = ({ cardsArray, opponentDiscard, discard }) => {
   const [, drop] = useDrop({
     accept: ItemTypes.CARD,
     drop(item, monitor) {
-      console.log('dropped', item, monitor);
+      console.log('dropped item: ', item);
       discard(item.index);
-    },
-    hover(item, monitor) { // is triggered continuously while hovering with a dragged item
-      console.log('hovering');
     },
   });
 

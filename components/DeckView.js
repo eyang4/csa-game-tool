@@ -6,19 +6,24 @@ export const DeckView = (props) => {
     <div className='outline'>
       Decklist
       {props.decks.map((deck, index) => {
-      return (<div key={deck[0]}>
-        <div>
-          {deck[0]}
-          {/* <button type='button' id={index} onClick={removeDeck}>x</button> */}
-        </div>
-        <div>
-          {deck[1].map((cardID, index) => {
-            return (<div key={cardID}>
-              {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
-              </div>);
-          })}
-        </div>
-      </div>)})}
+        return (
+          <div key={deck[0]}>
+            <div>
+              {deck[0]}
+              {/* <button type='button' id={index} onClick={removeDeck}>x</button> */}
+            </div>
+            <div>
+              {deck[1].map((cardID, index) => {
+                return (
+                  <div key={cardID}>
+                    {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };

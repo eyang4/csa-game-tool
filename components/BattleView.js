@@ -1,5 +1,3 @@
-// TODO: modularize into components
-
 import React, { useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
@@ -15,13 +13,13 @@ export const BattleView = (props) => {
   const [opponentDiscard, setOpponentDiscard] = useState([]);
 
   useEffect(() => {
-    console.log('activeDeck: ', activeDeck);
+    // console.log('activeDeck: ', activeDeck);
     if (activeDeck !== -1) setPlayerDeck(props.decks[activeDeck][1]);
   }, [activeDeck]);
 
-  useEffect(() => {
-    console.log('opponentDeck: ', opponentDeck);
-  }, [opponentDeck]);
+  // useEffect(() => {
+  //   console.log('opponentDeck: ', opponentDeck);
+  // }, [opponentDeck]);
 
   const selectDeck = (event) => {
     setActiveDeck(event.target.id);
@@ -54,8 +52,16 @@ export const BattleView = (props) => {
 
   const discard = (index) => {
     console.log('discarding');
-    setOpponentDiscard(opponentDiscard.concat([opponentDeck[index]]));
-    setOpponentDeck(opponentDeck.slice(0,index).concat(opponentDeck.slice(index + 1)));
+    if (opponentDiscard.length === 3) {
+      const moveToDiscard = opponentDeck[index];
+      const returnToDeck = opponentDiscard[0];
+      setOpponentDiscard(opponentDiscard.slice(1).concat([moveToDiscard]));
+      setOpponentDeck([returnToDeck].concat(opponentDeck.slice(0,index).concat(opponentDeck.slice(index + 1))));
+    }
+    else {
+      setOpponentDiscard(opponentDiscard.concat([opponentDeck[index]]));
+      setOpponentDeck(opponentDeck.slice(0,index).concat(opponentDeck.slice(index + 1)));
+    }
   }
 
   return (

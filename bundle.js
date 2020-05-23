@@ -114,7 +114,6 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-// TODO: modularize into components
 
 
 
@@ -152,12 +151,11 @@ var BattleView = function BattleView(props) {
       setOpponentDiscard = _useState12[1];
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log('activeDeck: ', activeDeck);
+    // console.log('activeDeck: ', activeDeck);
     if (activeDeck !== -1) setPlayerDeck(props.decks[activeDeck][1]);
-  }, [activeDeck]);
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log('opponentDeck: ', opponentDeck);
-  }, [opponentDeck]);
+  }, [activeDeck]); // useEffect(() => {
+  //   console.log('opponentDeck: ', opponentDeck);
+  // }, [opponentDeck]);
 
   var selectDeck = function selectDeck(event) {
     setActiveDeck(event.target.id);
@@ -189,8 +187,16 @@ var BattleView = function BattleView(props) {
 
   var discard = function discard(index) {
     console.log('discarding');
-    setOpponentDiscard(opponentDiscard.concat([opponentDeck[index]]));
-    setOpponentDeck(opponentDeck.slice(0, index).concat(opponentDeck.slice(index + 1)));
+
+    if (opponentDiscard.length === 3) {
+      var moveToDiscard = opponentDeck[index];
+      var returnToDeck = opponentDiscard[0];
+      setOpponentDiscard(opponentDiscard.slice(1).concat([moveToDiscard]));
+      setOpponentDeck([returnToDeck].concat(opponentDeck.slice(0, index).concat(opponentDeck.slice(index + 1))));
+    } else {
+      setOpponentDiscard(opponentDiscard.concat([opponentDeck[index]]));
+      setOpponentDeck(opponentDeck.slice(0, index).concat(opponentDeck.slice(index + 1)));
+    }
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -280,7 +286,12 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
-var BuildDeck = function BuildDeck(props) {
+var BuildDeck = function BuildDeck(_ref) {
+  var cardsArray = _ref.cardsArray,
+      cardsHash = _ref.cardsHash,
+      decks = _ref.decks,
+      setDecks = _ref.setDecks;
+
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
       searchTerm = _useState2[0],
@@ -294,19 +305,20 @@ var BuildDeck = function BuildDeck(props) {
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
       currentDeck = _useState6[0],
-      setCurrentDeck = _useState6[1];
+      setCurrentDeck = _useState6[1]; // useEffect(() => {
+  //   console.log('cardsArray: ', cardsArray);
+  //   console.log('cardsHash: ', cardsHash);
+  // }, []);
+  // useEffect(() => {
+  //   console.log('searchTerm: ', searchTerm);
+  // }, [searchTerm]);
+  // useEffect(() => {
+  //   console.log('deckName: ', deckName);
+  // }, [deckName]);
+  // useEffect(() => {
+  //   console.log('currentDeck: ', currentDeck);
+  // }, [currentDeck]);
 
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log('cardsArray: ', props.cardsArray);
-    console.log('cardsHash: ', props.cardsHash);
-  }, []);
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {// console.log('searchTerm: ', searchTerm);
-  }, [searchTerm]);
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {// console.log('deckName: ', deckName);
-  }, [deckName]);
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log('currentDeck: ', currentDeck);
-  }, [currentDeck]);
 
   var changeSearchTerm = function changeSearchTerm(event) {
     setSearchTerm(event.target.value);
@@ -317,26 +329,25 @@ var BuildDeck = function BuildDeck(props) {
   };
 
   var search = function search(event) {
-    event.preventDefault();
-    console.log('event.target:', event.target['search-term'].value);
+    event.preventDefault(); // console.log('event.target:', event.target['search-term'].value);
+
     var searchTerm = event.target['search-term'].value; // autocomplete does not trigger onChange
+    // console.log('submitted: ', searchTerm);
 
-    console.log('submitted: ', searchTerm);
-    var formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
-    console.log('cleaned: ', formatted);
+    var formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase(); // console.log('cleaned: ', formatted);
 
-    if (props.cardsHash[formatted] !== undefined) {
-      setCurrentDeck(currentDeck.concat([props.cardsHash[formatted]])); // do not mutate
+    if (cardsHash[formatted] !== undefined) {
+      setCurrentDeck(currentDeck.concat([cardsHash[formatted]])); // do not mutate
     }
 
     setSearchTerm('');
   };
 
   var saveDeck = function saveDeck(event) {
-    event.preventDefault();
-    console.log('currentDeck: ', currentDeck); // if (currentDeck.length === 9 || currentDeck.length === 10) {
+    event.preventDefault(); // console.log('currentDeck: ', currentDeck);
+    // if (currentDeck.length === 9 || currentDeck.length === 10) {
 
-    props.setDecks(props.decks.concat([[deckName, currentDeck]]));
+    setDecks(decks.concat([[deckName, currentDeck]]));
     setDeckName('');
     setCurrentDeck([]); // }
   };
@@ -373,7 +384,7 @@ var BuildDeck = function BuildDeck(props) {
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Card count: ", currentDeck.length), currentDeck.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: cardID
-    }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       type: "button",
       id: index,
       onClick: removeCard
@@ -516,12 +527,8 @@ var DiscardList = function DiscardList(_ref) {
   var _useDrop = Object(react_dnd__WEBPACK_IMPORTED_MODULE_1__["useDrop"])({
     accept: _ItemTypes__WEBPACK_IMPORTED_MODULE_2__["default"].CARD,
     drop: function drop(item, monitor) {
-      console.log('dropped', item, monitor);
+      console.log('dropped item: ', item);
       discard(item.index);
-    },
-    hover: function hover(item, monitor) {
-      // is triggered continuously while hovering with a dragged item
-      console.log('hovering');
     }
   }),
       _useDrop2 = _slicedToArray(_useDrop, 2),
@@ -595,17 +602,12 @@ var App = function App() {
 
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
-      autocompleteSource = _useState6[0],
-      setAutocompleteSource = _useState6[1];
+      decks = _useState6[0],
+      setDecks = _useState6[1]; // useEffect(() => {
+  //   console.log('decks: ', decks);
+  // }, [decks]);
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
-      _useState8 = _slicedToArray(_useState7, 2),
-      decks = _useState8[0],
-      setDecks = _useState8[1];
 
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log('decks: ', decks);
-  }, [decks]);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     var cardsHash = {};
     var autocompleteSource = [];
@@ -616,7 +618,6 @@ var App = function App() {
     }
 
     setCardsHash(cardsHash);
-    setAutocompleteSource(autocompleteSource);
     $('.searchTerm').autocomplete({
       source: autocompleteSource,
       autoFocus: true
@@ -626,11 +627,11 @@ var App = function App() {
     type: "file",
     id: "file-selector",
     onChange: function onChange(event) {
-      var fileList = event.target.files;
-      console.log(fileList);
+      var fileList = event.target.files; // console.log('fileList: ', fileList);
+
       var fileReader = new FileReader();
       fileReader.addEventListener('load', function (event) {
-        // console.log('logging', event.target.result, JSON.parse(fileReader.result));
+        // console.log('fileReader loaded: ', event.target.result, ', parsed: ', JSON.parse(fileReader.result));
         setCardsArray(JSON.parse(fileReader.result));
       });
       fileReader.readAsText(fileList[0]);
