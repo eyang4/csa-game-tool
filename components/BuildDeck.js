@@ -6,11 +6,6 @@ export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
   const [currentDeck, setCurrentDeck] = useState([]);
 
   // useEffect(() => {
-  //   console.log('cardsArray: ', cardsArray);
-  //   console.log('cardsHash: ', cardsHash);
-  // }, []);
-
-  // useEffect(() => {
   //   console.log('deckName: ', deckName);
   // }, [deckName]);
 

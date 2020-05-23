@@ -3,6 +3,7 @@ import { Search } from './Search';
 
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
+import ItemTypes from './ItemTypes';
 import { Card } from './Card';
 import { DiscardList } from './DiscardList';
 
@@ -69,42 +70,34 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
             Opponent deck
             {(opponentDeck.length > 0)
             ? opponentDeck.map((cardID, index) => {
-                return (<Card key={cardID }cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} />);
+                return (<Card key={cardID} cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} itemType={ItemTypes.OPPONENTCARD} />);
               })
             : ''}
           </div>
           <div className='outline'>
             Opponent discard
-            <DiscardList cardsArray={cardsArray} deck={opponentDeck} setDeck={setOpponentDeck} discard={opponentDiscard} setDiscard={setOpponentDiscard} />
+            <DiscardList cardsArray={cardsArray} deck={opponentDeck} setDeck={setOpponentDeck} discard={opponentDiscard} setDiscard={setOpponentDiscard} itemType={ItemTypes.OPPONENTCARD} />
           </div>
         </div>
       </DndProvider>
-      <div className='outline'>
+
+      <DndProvider backend={Backend}>
         <div className='outline'>
-          Player deck
-          {(activeDeck !== -1)
-          ? playerDeck.map((cardID, index) => {
-              return (
-                <div key={cardID}>
-                  {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
-                </div>
-              );
-            })
-          : ''}
+          <div className='outline'>
+            Player deck
+            {(activeDeck !== -1)
+            ? playerDeck.map((cardID, index) => {
+                return (<Card key={cardID} cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} itemType={ItemTypes.PLAYERCARD} />
+                );
+              })
+            : ''}
+          </div>
+          <div className='outline'>
+            Player discard
+            <DiscardList cardsArray={cardsArray} deck={playerDeck} setDeck={setPlayerDeck} discard={playerDiscard} setDiscard={setPlayerDiscard} itemType={ItemTypes.PLAYERCARD} />
+          </div>
         </div>
-        <div className='outline'>
-          Player discard
-          {(playerDiscard.length > 0)
-          ? playerDiscard.map((cardID, index) => {
-              return (
-                <div key={cardID}>
-                  {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
-                </div>
-              );
-            })
-          : ''}
-        </div>
-      </div>
+      </DndProvider>
     </div>
   );
 };

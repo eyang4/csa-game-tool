@@ -25,6 +25,9 @@ export const App = () => {
       source: autocompleteSource,
       autoFocus: true,
     });
+
+    console.log('cardsArray: ', cardsArray);
+    console.log('cardsHash: ', cardsHash);
   }, [cardsArray]);
 
   return (

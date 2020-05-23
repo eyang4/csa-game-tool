@@ -101,8 +101,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Search__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Search */ "./components/Search.js");
 /* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/esm/index.js");
 /* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/esm/index.js");
-/* harmony import */ var _Card__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Card */ "./components/Card.js");
-/* harmony import */ var _DiscardList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DiscardList */ "./components/DiscardList.js");
+/* harmony import */ var _ItemTypes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ItemTypes */ "./components/ItemTypes.js");
+/* harmony import */ var _Card__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Card */ "./components/Card.js");
+/* harmony import */ var _DiscardList__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./DiscardList */ "./components/DiscardList.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -114,6 +115,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -202,36 +204,48 @@ var BattleView = function BattleView(_ref) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, "Opponent deck", opponentDeck.length > 0 ? opponentDeck.map(function (cardID, index) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_4__["Card"], {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_5__["Card"], {
       key: cardID,
       cardID: cardID,
       index: index,
       union: cardsArray[cardID - 1]["union"],
-      name: cardsArray[cardID - 1]["name"]
+      name: cardsArray[cardID - 1]["name"],
+      itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].OPPONENTCARD
     });
   }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
-  }, "Opponent discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_5__["DiscardList"], {
+  }, "Opponent discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_6__["DiscardList"], {
     cardsArray: cardsArray,
     deck: opponentDeck,
     setDeck: setOpponentDeck,
     discard: opponentDiscard,
-    setDiscard: setOpponentDiscard
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    setDiscard: setOpponentDiscard,
+    itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].OPPONENTCARD
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_2__["DndProvider"], {
+    backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_3__["default"]
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, "Player deck", activeDeck !== -1 ? playerDeck.map(function (cardID, index) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: cardID
-    }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_5__["Card"], {
+      key: cardID,
+      cardID: cardID,
+      index: index,
+      union: cardsArray[cardID - 1]["union"],
+      name: cardsArray[cardID - 1]["name"],
+      itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].PLAYERCARD
+    });
   }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
-  }, "Player discard", playerDiscard.length > 0 ? playerDiscard.map(function (cardID, index) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: cardID
-    }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
-  }) : '')));
+  }, "Player discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_6__["DiscardList"], {
+    cardsArray: cardsArray,
+    deck: playerDeck,
+    setDeck: setPlayerDeck,
+    discard: playerDiscard,
+    setDiscard: setPlayerDiscard,
+    itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].PLAYERCARD
+  })))));
 };
 
 /***/ }),
@@ -278,10 +292,6 @@ var BuildDeck = function BuildDeck(_ref) {
       _useState4 = _slicedToArray(_useState3, 2),
       currentDeck = _useState4[0],
       setCurrentDeck = _useState4[1]; // useEffect(() => {
-  //   console.log('cardsArray: ', cardsArray);
-  //   console.log('cardsHash: ', cardsHash);
-  // }, []);
-  // useEffect(() => {
   //   console.log('deckName: ', deckName);
   // }, [deckName]);
   // useEffect(() => {
@@ -372,11 +382,12 @@ var Card = function Card(_ref) {
   var cardID = _ref.cardID,
       index = _ref.index,
       union = _ref.union,
-      name = _ref.name;
+      name = _ref.name,
+      itemType = _ref.itemType;
 
   var _useDrag = Object(react_dnd__WEBPACK_IMPORTED_MODULE_1__["useDrag"])({
     item: {
-      type: _ItemTypes__WEBPACK_IMPORTED_MODULE_2__["default"].CARD,
+      type: itemType,
       index: index
     },
     collect: function collect(monitor) {
@@ -385,13 +396,9 @@ var Card = function Card(_ref) {
         isDragging: monitor.isDragging() // monitors expose the state of the current drag operation
 
       };
-    },
-    begin: function begin(monitor) {
-      return console.log('begin drag. monitor: ', monitor);
-    },
-    end: function end(item, monitor) {
-      return console.log('end drag. item: ', item, ', monitor: ', monitor);
-    }
+    } // begin: (monitor) => console.log('begin drag. monitor: ', monitor),
+    // end: (item, monitor) => console.log('end drag. item: ', item, ', monitor: ', monitor),
+
   }),
       _useDrag2 = _slicedToArray(_useDrag, 2),
       isDragging = _useDrag2[0].isDragging,
@@ -448,7 +455,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/esm/index.js");
-/* harmony import */ var _ItemTypes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ItemTypes */ "./components/ItemTypes.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -463,18 +469,18 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var DiscardList = function DiscardList(_ref) {
   var cardsArray = _ref.cardsArray,
       deck = _ref.deck,
       setDeck = _ref.setDeck,
       discard = _ref.discard,
-      setDiscard = _ref.setDiscard;
+      setDiscard = _ref.setDiscard,
+      itemType = _ref.itemType;
 
   var _useDrop = Object(react_dnd__WEBPACK_IMPORTED_MODULE_1__["useDrop"])({
-    accept: _ItemTypes__WEBPACK_IMPORTED_MODULE_2__["default"].CARD,
+    accept: itemType,
     drop: function drop(item, monitor) {
-      console.log('dropped item: ', item);
+      // console.log('dropped item: ', item);
       update(item.index);
     }
   }),
@@ -516,7 +522,8 @@ var DiscardList = function DiscardList(_ref) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  CARD: 'card'
+  PLAYERCARD: 'playerCard',
+  OPPONENTCARD: 'opponentCard'
 });
 
 /***/ }),
@@ -662,6 +669,8 @@ var App = function App() {
       source: autocompleteSource,
       autoFocus: true
     });
+    console.log('cardsArray: ', cardsArray);
+    console.log('cardsHash: ', cardsHash);
   }, [cardsArray]);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, cardsArray.length === 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "file",

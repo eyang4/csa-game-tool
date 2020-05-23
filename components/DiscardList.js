@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
-import ItemTypes from './ItemTypes';
 
-export const DiscardList = ({ cardsArray, deck, setDeck, discard, setDiscard }) => {
+export const DiscardList = ({ cardsArray, deck, setDeck, discard, setDiscard, itemType }) => {
 
   const [, drop] = useDrop({
-    accept: ItemTypes.CARD,
+    accept: itemType,
     drop(item, monitor) {
-      console.log('dropped item: ', item);
+      // console.log('dropped item: ', item);
       update(item.index);
     },
   });
