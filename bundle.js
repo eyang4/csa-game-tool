@@ -477,6 +477,11 @@ var DiscardList = function DiscardList(_ref) {
       setDiscard = _ref.setDiscard,
       itemType = _ref.itemType;
 
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      lastState = _useState2[0],
+      setLastState = _useState2[1];
+
   var _useDrop = Object(react_dnd__WEBPACK_IMPORTED_MODULE_1__["useDrop"])({
     accept: itemType,
     drop: function drop(item, monitor) {
@@ -489,6 +494,7 @@ var DiscardList = function DiscardList(_ref) {
 
   var update = function update(index) {
     console.log('discarding');
+    setLastState([deck, discard]);
 
     if (discard.length === 3) {
       var moveToDiscard = deck[index];
@@ -501,13 +507,22 @@ var DiscardList = function DiscardList(_ref) {
     }
   };
 
+  var undo = function undo(event) {
+    setDeck(lastState[0]);
+    setDiscard(lastState[1]);
+    setLastState([]);
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     ref: drop
   }, discard.length > 0 ? discard.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: cardID
     }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
-  }) : 'Drag here');
+  }) : 'Drag here', lastState.length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    onClick: undo
+  }, "Undo")) : '');
 };
 
 /***/ }),
