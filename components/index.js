@@ -24,6 +24,14 @@ export const App = () => {
     $('.searchTerm').autocomplete({
       source: autocompleteSource,
       autoFocus: true,
+      response: (event, ui) => {
+        // console.log('event, ui: ', event, ui);
+        const term = event.target.defaultValue;
+        ui.content = ui.content.filter(searchResult => {
+          if (searchResult.value.slice(0, term.length) === term) return true;
+          else return false;
+        });
+      },
     });
 
     console.log('cardsArray: ', cardsArray);

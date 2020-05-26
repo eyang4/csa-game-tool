@@ -692,7 +692,14 @@ var App = function App() {
     setCardsHash(cardsHash);
     $('.searchTerm').autocomplete({
       source: autocompleteSource,
-      autoFocus: true
+      autoFocus: true,
+      response: function response(event, ui) {
+        // console.log('event, ui: ', event, ui);
+        var term = event.target.defaultValue;
+        ui.content = ui.content.filter(function (searchResult) {
+          if (searchResult.value.slice(0, term.length) === term) return true;else return false;
+        });
+      }
     });
     console.log('cardsArray: ', cardsArray);
     console.log('cardsHash: ', cardsHash);
