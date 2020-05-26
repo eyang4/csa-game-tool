@@ -174,8 +174,8 @@ var BattleView = function BattleView(_ref) {
     setActiveDeck(event.target.id);
   };
 
-  var removeCard = function removeCard(event) {
-    setOpponentDeck(opponentDeck.slice(0, parseInt(event.target.id)).concat(opponentDeck.slice(parseInt(event.target.id) + 1)));
+  var removeCard = function removeCard(index, setDeck) {
+    setDeck(opponentDeck.slice(0, index).concat(opponentDeck.slice(parseInt(index) + 1)));
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -210,7 +210,9 @@ var BattleView = function BattleView(_ref) {
       index: index,
       union: cardsArray[cardID - 1]["union"],
       name: cardsArray[cardID - 1]["name"],
-      itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].OPPONENTCARD
+      itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].OPPONENTCARD,
+      removeCard: removeCard,
+      setDeck: setOpponentDeck
     });
   }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
@@ -383,7 +385,9 @@ var Card = function Card(_ref) {
       index = _ref.index,
       union = _ref.union,
       name = _ref.name,
-      itemType = _ref.itemType;
+      itemType = _ref.itemType,
+      removeCard = _ref.removeCard,
+      setDeck = _ref.setDeck;
 
   var _useDrag = Object(react_dnd__WEBPACK_IMPORTED_MODULE_1__["useDrag"])({
     item: {
@@ -408,7 +412,13 @@ var Card = function Card(_ref) {
     ref: drag,
     className: "wrap",
     key: cardID
-  }, union, " ", name);
+  }, union, " ", name, removeCard !== undefined ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    index: index,
+    onClick: function onClick() {
+      removeCard(index, setDeck);
+    }
+  }, "x") : '');
 };
 
 /***/ }),

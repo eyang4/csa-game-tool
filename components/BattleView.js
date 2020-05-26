@@ -39,11 +39,11 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
     setActiveDeck(event.target.id);
   }
 
-  const removeCard = (event) => {
-    setOpponentDeck(
+  const removeCard = (index, setDeck) => {
+    setDeck(
       opponentDeck
-        .slice(0, parseInt(event.target.id))
-        .concat(opponentDeck.slice(parseInt(event.target.id) + 1))
+        .slice(0, index)
+        .concat(opponentDeck.slice(parseInt(index) + 1))
       );
   }
 
@@ -70,7 +70,7 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
             Opponent deck
             {(opponentDeck.length > 0)
             ? opponentDeck.map((cardID, index) => {
-                return (<Card key={cardID} cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} itemType={ItemTypes.OPPONENTCARD} />);
+                return (<Card key={cardID} cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} itemType={ItemTypes.OPPONENTCARD} removeCard={removeCard} setDeck={setOpponentDeck} />);
               })
             : ''}
           </div>
