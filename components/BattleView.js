@@ -62,7 +62,7 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
       </div>
       <div className='outline'>
         Add opponent cards
-        <Search cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} getter={opponentDeck} setter={setOpponentDeck} />
+        <Search id='addOpponentCards' cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} getter={opponentDeck} setter={setOpponentDeck} />
       </div>
       <DndProvider backend={Backend}>
         <div className='outline'>

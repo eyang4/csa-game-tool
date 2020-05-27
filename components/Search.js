@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from 'react';
 
-export const Search = ({ cardsArray, cardsHash, decks, setDecks, getter, setter }) => {
+export const Search = ({ id, cardsArray, cardsHash, decks, setDecks, getter, setter }) => {
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    $(`#${id}-search-term`).on('autocompleteselect', (event, ui) => {
+      event.preventDefault();
+      // console.log('selected. id, event, ui: ', id, event, ui);
+      // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
+      if (cardsHash[ui.item.value] !== undefined) {
+        setter(
+          getter.concat([ cardsHash[ui.item.value] ])
+        ); // do not mutate
+      }
+      setSearchTerm('');
+    });
+  }, [cardsHash, getter]); // cardsHash is initialized as an empty object and getter values change
 
   // useEffect(() => {
   //   console.log('searchTerm: ', searchTerm);
@@ -13,8 +27,8 @@ export const Search = ({ cardsArray, cardsHash, decks, setDecks, getter, setter 
 
   const search = (event) => {
     event.preventDefault();
-    // console.log('event.target:', event.target['search-term'].value);
-    const searchTerm = event.target['search-term'].value; // autocomplete does not trigger onChange
+    // console.log('event.target:', event.target[`${id}-search-term`].value);
+    const searchTerm = event.target[`${id}-search-term`].value; // autocomplete does not trigger onChange
     // console.log('submitted: ', searchTerm);
     const formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
     // console.log('cleaned: ', formatted);
@@ -28,8 +42,8 @@ export const Search = ({ cardsArray, cardsHash, decks, setDecks, getter, setter 
 
   return (
     <form onSubmit={search}>
-      <label htmlFor='search-term'>Search: </label>
-      <input type='text' className='searchTerm' id='search-term' value={searchTerm} onChange={changeSearchTerm} />
+      <label htmlFor={`${id}-search-term`}>Search: </label>
+      <input type='text' className='searchTerm' id={`${id}-search-term`} value={searchTerm} onChange={changeSearchTerm} />
       <input type='submit' />
     </form>
   );

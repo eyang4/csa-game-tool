@@ -25,18 +25,23 @@ export const App = () => {
       source: autocompleteSource,
       autoFocus: true,
       response: (event, ui) => {
-        // console.log('event, ui: ', event, ui);
+        // console.log('response. event, ui: ', event, ui);
         const term = event.target.defaultValue;
-        ui.content = ui.content.filter(searchResult => {
-          if (searchResult.value.slice(0, term.length) === term) return true;
-          else return false;
-        });
+        let searchResult = ui.content[ui.content.length - 1];
+        while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
+          ui.content.pop(); // must modify ui.content directly, cannot replace
+          searchResult = ui.content[ui.content.length - 1];
+        }
       },
+      minLength: 0,
+      delay: 0,
     });
 
     console.log('cardsArray: ', cardsArray);
     console.log('cardsHash: ', cardsHash);
   }, [cardsArray]);
+
+  const autocompleteSelected = () => {};
 
   return (
     <div>

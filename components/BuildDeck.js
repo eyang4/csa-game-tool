@@ -39,7 +39,7 @@ export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
 
   return (
     <div className='outline'>
-      <Search cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} getter={currentDeck} setter={setCurrentDeck} />
+      <Search id='addPlayerCards' cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} getter={currentDeck} setter={setCurrentDeck} />
       <form onSubmit={saveDeck}>
         <label htmlFor='deck-name'>Deck Name: </label>
         <input type='text' id='deck-name' value={deckName} onChange={changeDeckName} />

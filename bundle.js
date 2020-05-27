@@ -191,6 +191,7 @@ var BattleView = function BattleView(_ref) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Selected deck: ", activeDeck !== -1 ? decks[activeDeck][0] : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, "Add opponent cards", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_1__["Search"], {
+    id: "addOpponentCards",
     cardsArray: cardsArray,
     cardsHash: cardsHash,
     decks: decks,
@@ -321,6 +322,7 @@ var BuildDeck = function BuildDeck(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "outline"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_1__["Search"], {
+    id: "addPlayerCards",
     cardsArray: cardsArray,
     cardsHash: cardsHash,
     decks: decks,
@@ -579,7 +581,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Search = function Search(_ref) {
-  var cardsArray = _ref.cardsArray,
+  var id = _ref.id,
+      cardsArray = _ref.cardsArray,
       cardsHash = _ref.cardsHash,
       decks = _ref.decks,
       setDecks = _ref.setDecks,
@@ -589,19 +592,32 @@ var Search = function Search(_ref) {
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
       searchTerm = _useState2[0],
-      setSearchTerm = _useState2[1]; // useEffect(() => {
+      setSearchTerm = _useState2[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    $("#".concat(id, "-search-term")).on('autocompleteselect', function (event, ui) {
+      event.preventDefault(); // console.log('selected. id, event, ui: ', id, event, ui);
+      // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
+
+      if (cardsHash[ui.item.value] !== undefined) {
+        setter(getter.concat([cardsHash[ui.item.value]])); // do not mutate
+      }
+
+      setSearchTerm('');
+    });
+  }, [cardsHash, getter]); // cardsHash is initialized as an empty object and getter values change
+  // useEffect(() => {
   //   console.log('searchTerm: ', searchTerm);
   // }, [searchTerm]);
-
 
   var changeSearchTerm = function changeSearchTerm(event) {
     setSearchTerm(event.target.value);
   };
 
   var search = function search(event) {
-    event.preventDefault(); // console.log('event.target:', event.target['search-term'].value);
+    event.preventDefault(); // console.log('event.target:', event.target[`${id}-search-term`].value);
 
-    var searchTerm = event.target['search-term'].value; // autocomplete does not trigger onChange
+    var searchTerm = event.target["".concat(id, "-search-term")].value; // autocomplete does not trigger onChange
     // console.log('submitted: ', searchTerm);
 
     var formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase(); // console.log('cleaned: ', formatted);
@@ -616,11 +632,11 @@ var Search = function Search(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     onSubmit: search
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-    htmlFor: "search-term"
+    htmlFor: "".concat(id, "-search-term")
   }, "Search: "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "text",
     className: "searchTerm",
-    id: "search-term",
+    id: "".concat(id, "-search-term"),
     value: searchTerm,
     onChange: changeSearchTerm
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
@@ -694,16 +710,25 @@ var App = function App() {
       source: autocompleteSource,
       autoFocus: true,
       response: function response(event, ui) {
-        // console.log('event, ui: ', event, ui);
+        // console.log('response. event, ui: ', event, ui);
         var term = event.target.defaultValue;
-        ui.content = ui.content.filter(function (searchResult) {
-          if (searchResult.value.slice(0, term.length) === term) return true;else return false;
-        });
-      }
+        var searchResult = ui.content[ui.content.length - 1];
+
+        while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
+          ui.content.pop(); // must modify ui.content directly, cannot replace
+
+          searchResult = ui.content[ui.content.length - 1];
+        }
+      },
+      minLength: 0,
+      delay: 0
     });
     console.log('cardsArray: ', cardsArray);
     console.log('cardsHash: ', cardsHash);
   }, [cardsArray]);
+
+  var autocompleteSelected = function autocompleteSelected() {};
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, cardsArray.length === 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "file",
     id: "file-selector",
