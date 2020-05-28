@@ -7,3 +7,28 @@
 .wrap {
   background: linear-gradient(5deg, white, grey);
 }
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip .tooltipText {
+  visibility: hidden;
+  width: 300px;
+  background-color: white;
+  color: black;
+  border-radius: 6px;
+  padding: 5px 5px;
+  border: 1px solid;
+
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  /* sets left to be 105% of view width, changes if .tooltip has display: inline-block */
+  /* left: 105%; */
+}
+
+.tooltip:hover .tooltipText, .tooltip:active .tooltipText {
+  /* :active triggers on touch for mobile */
+  visibility: visible;
+}

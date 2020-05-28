@@ -211,6 +211,7 @@ var BattleView = function BattleView(_ref) {
       index: index,
       union: cardsArray[cardID - 1]["union"],
       name: cardsArray[cardID - 1]["name"],
+      card: cardsArray[cardID - 1],
       itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].OPPONENTCARD,
       removeCard: removeCard,
       setDeck: setOpponentDeck
@@ -387,6 +388,7 @@ var Card = function Card(_ref) {
       index = _ref.index,
       union = _ref.union,
       name = _ref.name,
+      card = _ref.card,
       itemType = _ref.itemType,
       removeCard = _ref.removeCard,
       setDeck = _ref.setDeck;
@@ -412,7 +414,7 @@ var Card = function Card(_ref) {
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     ref: drag,
-    className: "wrap",
+    className: "wrap tooltip",
     key: cardID
   }, union, " ", name, removeCard !== undefined ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
@@ -420,7 +422,11 @@ var Card = function Card(_ref) {
     onClick: function onClick() {
       removeCard(index, setDeck);
     }
-  }, "x") : '');
+  }, "x") : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: "tooltipText"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Name:"), " ", card.name, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Union:"), " ", card.union, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Cost:"), " ", Object.keys(card.cost).length > 0 ? Object.entries(card.cost).map(function (colorCost) {
+    return colorCost[0] + colorCost[1];
+  }) : 'none', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Ability:"), " ", card.ability, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Power:"), " ", card.power, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Rarity:"), " ", card.rarity, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
 };
 
 /***/ }),
@@ -712,12 +718,16 @@ var App = function App() {
       response: function response(event, ui) {
         // console.log('response. event, ui: ', event, ui);
         var term = event.target.defaultValue;
-        var searchResult = ui.content[ui.content.length - 1];
 
-        while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
-          ui.content.pop(); // must modify ui.content directly, cannot replace
+        if (ui.content.length > 0) {
+          // unnecessary to trim when no matches are returned
+          var searchResult = ui.content[ui.content.length - 1];
 
-          searchResult = ui.content[ui.content.length - 1];
+          while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
+            ui.content.pop(); // must modify ui.content directly, cannot replace
+
+            searchResult = ui.content[ui.content.length - 1];
+          }
         }
       },
       minLength: 0,

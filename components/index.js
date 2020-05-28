@@ -27,10 +27,12 @@ export const App = () => {
       response: (event, ui) => {
         // console.log('response. event, ui: ', event, ui);
         const term = event.target.defaultValue;
-        let searchResult = ui.content[ui.content.length - 1];
-        while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
-          ui.content.pop(); // must modify ui.content directly, cannot replace
-          searchResult = ui.content[ui.content.length - 1];
+        if (ui.content.length > 0) { // unnecessary to trim when no matches are returned
+          let searchResult = ui.content[ui.content.length - 1];
+          while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
+            ui.content.pop(); // must modify ui.content directly, cannot replace
+            searchResult = ui.content[ui.content.length - 1];
+          }
         }
       },
       minLength: 0,

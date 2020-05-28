@@ -70,7 +70,7 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
             Opponent deck
             {(opponentDeck.length > 0)
             ? opponentDeck.map((cardID, index) => {
-                return (<Card key={cardID} cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} itemType={ItemTypes.OPPONENTCARD} removeCard={removeCard} setDeck={setOpponentDeck} />);
+                return (<Card key={cardID} cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} card={cardsArray[cardID - 1]} itemType={ItemTypes.OPPONENTCARD} removeCard={removeCard} setDeck={setOpponentDeck} />);
               })
             : ''}
           </div>
