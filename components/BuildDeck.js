@@ -32,14 +32,14 @@ export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
   const removeCard = (event) => {
     setCurrentDeck(
       currentDeck
-        .slice(0, parseInt(event.target.id))
-        .concat(currentDeck.slice(parseInt(event.target.id) + 1))
+        .slice(0, parseInt(event.target.getAttribute('index')))
+        .concat(currentDeck.slice(parseInt(event.target.getAttribute('index')) + 1))
     );
   }
 
   return (
-    <div className='outline'>
-      <Search id='addPlayerCards' cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} getter={currentDeck} setter={setCurrentDeck} />
+    <div>
+      <Search id='addPlayerCards' cardsHash={cardsHash} selectedDeck={currentDeck} setSelectedDeck={setCurrentDeck} />
       <form onSubmit={saveDeck}>
         <label htmlFor='deck-name'>Deck Name: </label>
         <input type='text' id='deck-name' value={deckName} onChange={changeDeckName} />
@@ -48,9 +48,9 @@ export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
       <div>Card count: {currentDeck.length}</div>
       {currentDeck.map((cardID, index) => {
         return (
-          <div key={cardID}>
+          <div key={index}>
             {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
-            <button type='button' id={index} onClick={removeCard}>x</button>
+            <button type='button' index={index} onClick={removeCard}>x</button>
           </div>
         );
       })}

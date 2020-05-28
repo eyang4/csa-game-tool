@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export const Search = ({ id, cardsArray, cardsHash, decks, setDecks, getter, setter }) => {
+export const Search = ({ id, cardsHash, selectedDeck, setSelectedDeck }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -9,13 +9,14 @@ export const Search = ({ id, cardsArray, cardsHash, decks, setDecks, getter, set
       // console.log('selected. id, event, ui: ', id, event, ui);
       // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
       if (cardsHash[ui.item.value] !== undefined) {
-        setter(
-          getter.concat([ cardsHash[ui.item.value] ])
+        setSelectedDeck(
+          selectedDeck.concat([ cardsHash[ui.item.value] ])
         ); // do not mutate
+        console.log('lag?');
       }
       setSearchTerm('');
     });
-  }, [cardsHash, getter]); // cardsHash is initialized as an empty object and getter values change
+  }, [cardsHash, selectedDeck]); // cardsHash is initialized as an empty object and selectedDeck values change
 
   // useEffect(() => {
   //   console.log('searchTerm: ', searchTerm);
@@ -33,8 +34,8 @@ export const Search = ({ id, cardsArray, cardsHash, decks, setDecks, getter, set
     const formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase();
     // console.log('cleaned: ', formatted);
     if (cardsHash[formatted] !== undefined) {
-      setter(
-        getter.concat([ cardsHash[formatted] ])
+      setSelectedDeck(
+        selectedDeck.concat([ cardsHash[formatted] ])
       ); // do not mutate
     }
     setSearchTerm('');

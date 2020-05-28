@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Search } from './Search';
-
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 import ItemTypes from './ItemTypes';
+import { Search } from './Search';
 import { Card } from './Card';
 import { DiscardList } from './DiscardList';
 
@@ -36,7 +35,7 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
   // }, [opponentDiscard]);
 
   const selectDeck = (event) => {
-    setActiveDeck(event.target.id);
+    setActiveDeck(event.target.getAttribute('index'));
   }
 
   const removeCard = (index, setDeck) => {
@@ -49,32 +48,32 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
 
   return (
     <div>
-      <div className='outline'>
+      <div>
         Select player deck
         {decks.map((deck, index) => {
-          return (<div key={deck[0]}>
+          return (<div key={`battleDeck-${deck[0]}-${index}`}>
             {deck[0]}
-            <button type='button' id={index} onClick={selectDeck}>Select</button>
+            <button type='button' index={index} onClick={selectDeck}>Select</button>
           </div>);
         })}
         <br />
         Selected deck: {(activeDeck !== -1) ? decks[activeDeck][0] : ''}
       </div>
-      <div className='outline'>
+      <div>
         Add opponent cards
-        <Search id='addOpponentCards' cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} getter={opponentDeck} setter={setOpponentDeck} />
+        <Search id='addOpponentCards' cardsHash={cardsHash} selectedDeck={opponentDeck} setSelectedDeck={setOpponentDeck} />
       </div>
       <DndProvider backend={Backend}>
-        <div className='outline'>
-          <div className='outline'>
+        <div>
+          <div>
             Opponent deck
             {(opponentDeck.length > 0)
             ? opponentDeck.map((cardID, index) => {
-                return (<Card key={cardID} cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} card={cardsArray[cardID - 1]} itemType={ItemTypes.OPPONENTCARD} removeCard={removeCard} setDeck={setOpponentDeck} />);
+                return (<Card key={`card-${ItemTypes.OPPONENTCARD}-${cardsArray[cardID - 1].name}`} index={index} card={cardsArray[cardID - 1]} itemType={ItemTypes.OPPONENTCARD} removeCard={removeCard} setDeck={setOpponentDeck} />);
               })
             : ''}
           </div>
-          <div className='outline'>
+          <div>
             Opponent discard
             <DiscardList cardsArray={cardsArray} deck={opponentDeck} setDeck={setOpponentDeck} discard={opponentDiscard} setDiscard={setOpponentDiscard} itemType={ItemTypes.OPPONENTCARD} />
           </div>
@@ -82,17 +81,17 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
       </DndProvider>
 
       <DndProvider backend={Backend}>
-        <div className='outline'>
-          <div className='outline'>
+        <div>
+          <div>
             Player deck
             {(activeDeck !== -1)
             ? playerDeck.map((cardID, index) => {
-                return (<Card key={cardID} cardID={cardID} index={index} union={cardsArray[cardID - 1]["union"]} name={cardsArray[cardID - 1]["name"]} itemType={ItemTypes.PLAYERCARD} />
+                return (<Card key={`card-${ItemTypes.PLAYERCARD}-${cardsArray[cardID - 1].name}`} index={index} card={cardsArray[cardID - 1]} itemType={ItemTypes.PLAYERCARD} setDeck={setOpponentDeck} />
                 );
               })
             : ''}
           </div>
-          <div className='outline'>
+          <div>
             Player discard
             <DiscardList cardsArray={cardsArray} deck={playerDeck} setDeck={setPlayerDeck} discard={playerDiscard} setDiscard={setPlayerDiscard} itemType={ItemTypes.PLAYERCARD} />
           </div>

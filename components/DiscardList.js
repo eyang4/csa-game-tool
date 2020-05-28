@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import React, { useState } from 'react';
+import { useDrop } from 'react-dnd';
 
 export const DiscardList = ({ cardsArray, deck, setDeck, discard, setDiscard, itemType }) => {
   const [lastState, setLastState] = useState([]);
@@ -13,7 +13,7 @@ export const DiscardList = ({ cardsArray, deck, setDeck, discard, setDiscard, it
   });
 
   const update = (index) => {
-    console.log('discarding');
+    // console.log('discarding');
     setLastState([deck, discard]);
     if (discard.length === 3) {
       const moveToDiscard = deck[index];
@@ -37,7 +37,7 @@ export const DiscardList = ({ cardsArray, deck, setDeck, discard, setDiscard, it
     <div ref={drop}>
       {(discard.length > 0)
       ? discard.map((cardID, index) => {
-          return (<div key={cardID}>{cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}</div>);
+          return (<div key={`discard-${itemType}-${cardID}`}>{cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}</div>);
         })
       : 'Drag here'}
       {(lastState.length > 0)

@@ -1,10 +1,16 @@
-.outline {
+div#main div {
   background-color: lightgrey;
   border: 1px solid black;
   padding: 5px;
 }
 
-.wrap {
+ul {
+  /* normalize styling for unordered list */
+	list-style-type: disc;
+	margin: 0 0 0 0;
+}
+
+.highlight {
   background: linear-gradient(5deg, white, grey);
 }
 
@@ -24,8 +30,6 @@
   position: absolute;
   z-index: 1;
   top: -5px;
-  /* sets left to be 105% of view width, changes if .tooltip has display: inline-block */
-  /* left: 105%; */
 }
 
 .tooltip:hover .tooltipText, .tooltip:active .tooltipText {

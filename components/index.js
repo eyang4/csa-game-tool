@@ -43,12 +43,10 @@ export const App = () => {
     console.log('cardsHash: ', cardsHash);
   }, [cardsArray]);
 
-  const autocompleteSelected = () => {};
-
   return (
     <div>
       {(cardsArray.length === 0)
-      ? <input type='file' id='file-selector' onChange={(event) => {
+      ? <input type='file' onChange={(event) => {
           const fileList = event.target.files;
           // console.log('fileList: ', fileList);
 
@@ -59,9 +57,9 @@ export const App = () => {
           });
           fileReader.readAsText(fileList[0]);
         }} />
-      : <div>
+      : <div id='main'>
           <BuildDeck cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
-          <DeckView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
+          <DeckView cardsArray={cardsArray} decks={decks} setDecks={setDecks} />
           <BattleView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
         </div>}
     </div>

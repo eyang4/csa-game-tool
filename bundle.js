@@ -98,10 +98,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BattleView", function() { return BattleView; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Search__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Search */ "./components/Search.js");
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/esm/index.js");
-/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/esm/index.js");
-/* harmony import */ var _ItemTypes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ItemTypes */ "./components/ItemTypes.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/esm/index.js");
+/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/esm/index.js");
+/* harmony import */ var _ItemTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ItemTypes */ "./components/ItemTypes.js");
+/* harmony import */ var _Search__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Search */ "./components/Search.js");
 /* harmony import */ var _Card__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Card */ "./components/Card.js");
 /* harmony import */ var _DiscardList__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./DiscardList */ "./components/DiscardList.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -171,84 +171,61 @@ var BattleView = function BattleView(_ref) {
   // }, [opponentDiscard]);
 
   var selectDeck = function selectDeck(event) {
-    setActiveDeck(event.target.id);
+    setActiveDeck(event.target.getAttribute('index'));
   };
 
   var removeCard = function removeCard(index, setDeck) {
     setDeck(opponentDeck.slice(0, index).concat(opponentDeck.slice(parseInt(index) + 1)));
   };
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, "Select player deck", decks.map(function (deck, index) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Select player deck", decks.map(function (deck, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: deck[0]
+      key: "battleDeck-".concat(deck[0], "-").concat(index)
     }, deck[0], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       type: "button",
-      id: index,
+      index: index,
       onClick: selectDeck
     }, "Select"));
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Selected deck: ", activeDeck !== -1 ? decks[activeDeck][0] : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, "Add opponent cards", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_1__["Search"], {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Selected deck: ", activeDeck !== -1 ? decks[activeDeck][0] : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Add opponent cards", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_4__["Search"], {
     id: "addOpponentCards",
-    cardsArray: cardsArray,
     cardsHash: cardsHash,
-    decks: decks,
-    setDecks: setDecks,
-    getter: opponentDeck,
-    setter: setOpponentDeck
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_2__["DndProvider"], {
-    backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_3__["default"]
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, "Opponent deck", opponentDeck.length > 0 ? opponentDeck.map(function (cardID, index) {
+    selectedDeck: opponentDeck,
+    setSelectedDeck: setOpponentDeck
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_1__["DndProvider"], {
+    backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_2__["default"]
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Opponent deck", opponentDeck.length > 0 ? opponentDeck.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_5__["Card"], {
-      key: cardID,
-      cardID: cardID,
+      key: "card-".concat(_ItemTypes__WEBPACK_IMPORTED_MODULE_3__["default"].OPPONENTCARD, "-").concat(cardsArray[cardID - 1].name),
       index: index,
-      union: cardsArray[cardID - 1]["union"],
-      name: cardsArray[cardID - 1]["name"],
       card: cardsArray[cardID - 1],
-      itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].OPPONENTCARD,
+      itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_3__["default"].OPPONENTCARD,
       removeCard: removeCard,
       setDeck: setOpponentDeck
     });
-  }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, "Opponent discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_6__["DiscardList"], {
+  }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Opponent discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_6__["DiscardList"], {
     cardsArray: cardsArray,
     deck: opponentDeck,
     setDeck: setOpponentDeck,
     discard: opponentDiscard,
     setDiscard: setOpponentDiscard,
-    itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].OPPONENTCARD
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_2__["DndProvider"], {
-    backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_3__["default"]
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, "Player deck", activeDeck !== -1 ? playerDeck.map(function (cardID, index) {
+    itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_3__["default"].OPPONENTCARD
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_1__["DndProvider"], {
+    backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_2__["default"]
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Player deck", activeDeck !== -1 ? playerDeck.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_5__["Card"], {
-      key: cardID,
-      cardID: cardID,
+      key: "card-".concat(_ItemTypes__WEBPACK_IMPORTED_MODULE_3__["default"].PLAYERCARD, "-").concat(cardsArray[cardID - 1].name),
       index: index,
-      union: cardsArray[cardID - 1]["union"],
-      name: cardsArray[cardID - 1]["name"],
-      itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].PLAYERCARD
+      card: cardsArray[cardID - 1],
+      itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_3__["default"].PLAYERCARD,
+      setDeck: setOpponentDeck
     });
-  }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, "Player discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_6__["DiscardList"], {
+  }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Player discard", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DiscardList__WEBPACK_IMPORTED_MODULE_6__["DiscardList"], {
     cardsArray: cardsArray,
     deck: playerDeck,
     setDeck: setPlayerDeck,
     discard: playerDiscard,
     setDiscard: setPlayerDiscard,
-    itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_4__["default"].PLAYERCARD
+    itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_3__["default"].PLAYERCARD
   })))));
 };
 
@@ -317,19 +294,14 @@ var BuildDeck = function BuildDeck(_ref) {
   };
 
   var removeCard = function removeCard(event) {
-    setCurrentDeck(currentDeck.slice(0, parseInt(event.target.id)).concat(currentDeck.slice(parseInt(event.target.id) + 1)));
+    setCurrentDeck(currentDeck.slice(0, parseInt(event.target.getAttribute('index'))).concat(currentDeck.slice(parseInt(event.target.getAttribute('index')) + 1)));
   };
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_1__["Search"], {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_1__["Search"], {
     id: "addPlayerCards",
-    cardsArray: cardsArray,
     cardsHash: cardsHash,
-    decks: decks,
-    setDecks: setDecks,
-    getter: currentDeck,
-    setter: setCurrentDeck
+    selectedDeck: currentDeck,
+    setSelectedDeck: setCurrentDeck
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     onSubmit: saveDeck
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -343,10 +315,10 @@ var BuildDeck = function BuildDeck(_ref) {
     type: "submit"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Card count: ", currentDeck.length), currentDeck.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: cardID
+      key: index
     }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       type: "button",
-      id: index,
+      index: index,
       onClick: removeCard
     }, "x"));
   }));
@@ -367,7 +339,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/esm/index.js");
-/* harmony import */ var _ItemTypes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ItemTypes */ "./components/ItemTypes.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -382,12 +353,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var Card = function Card(_ref) {
-  var cardID = _ref.cardID,
-      index = _ref.index,
-      union = _ref.union,
-      name = _ref.name,
+  var index = _ref.index,
       card = _ref.card,
       itemType = _ref.itemType,
       removeCard = _ref.removeCard,
@@ -397,36 +364,29 @@ var Card = function Card(_ref) {
     item: {
       type: itemType,
       index: index
-    },
-    collect: function collect(monitor) {
-      return {
-        // collector functions bundle up information using monitors
-        isDragging: monitor.isDragging() // monitors expose the state of the current drag operation
-
-      };
-    } // begin: (monitor) => console.log('begin drag. monitor: ', monitor),
+    } // collect: (monitor) => ({ // collector functions bundle up information using monitors
+    //   isDragging: monitor.isDragging(), // monitors expose the state of the current drag operation
+    // }),
+    // begin: (monitor) => console.log('begin drag. monitor: ', monitor),
     // end: (item, monitor) => console.log('end drag. item: ', item, ', monitor: ', monitor),
 
   }),
       _useDrag2 = _slicedToArray(_useDrag, 2),
-      isDragging = _useDrag2[0].isDragging,
       drag = _useDrag2[1];
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     ref: drag,
-    className: "wrap tooltip",
-    key: cardID
-  }, union, " ", name, removeCard !== undefined ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "highlight tooltip"
+  }, card.union, " ", card.name, removeCard !== undefined ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
-    index: index,
     onClick: function onClick() {
       removeCard(index, setDeck);
     }
   }, "x") : '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "tooltipText"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Name:"), " ", card.name, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Union:"), " ", card.union, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Cost:"), " ", Object.keys(card.cost).length > 0 ? Object.entries(card.cost).map(function (colorCost) {
-    return colorCost[0] + colorCost[1];
-  }) : 'none', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Ability:"), " ", card.ability, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Power:"), " ", card.power, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Rarity:"), " ", card.rarity, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Name:"), " ", card.name, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Union:"), " ", card.union, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Cost:"), " ", Object.keys(card.cost).length > 0 ? Object.keys(card.cost).length === 1 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, Object.entries(card.cost)[0][1], " ", Object.entries(card.cost)[0][0], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null)) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, Object.entries(card.cost).map(function (colorCost) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, colorCost[1], " ", colorCost[0]);
+  })) : '-', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Ability:"), " ", card.ability, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Power:"), " ", card.power, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Rarity:"), " ", card.rarity));
 };
 
 /***/ }),
@@ -444,16 +404,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
-var DeckView = function DeckView(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "outline"
-  }, "Decklist", props.decks.map(function (deck, index) {
+var DeckView = function DeckView(_ref) {
+  var cardsArray = _ref.cardsArray,
+      decks = _ref.decks,
+      setDecks = _ref.setDecks;
+
+  var removeDeck = function removeDeck(event) {
+    setDecks(decks.slice(0, event.target.getAttribute('index')).concat(decks.slice(event.target.getAttribute('index') + 1)));
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Decklist", decks.map(function (deck, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: deck[0]
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[0]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[1].map(function (cardID, index) {
+      key: "deckView-".concat(deck[0], "-").concat(index)
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[0], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      type: "button",
+      index: index,
+      onClick: removeDeck
+    }, "x")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[1].map(function (cardID, index) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        key: cardID
-      }, props.cardsArray[cardID - 1]["union"], " ", props.cardsArray[cardID - 1]["name"]);
+        key: index
+      }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
     })));
   }));
 };
@@ -511,7 +481,7 @@ var DiscardList = function DiscardList(_ref) {
       drop = _useDrop2[1];
 
   var update = function update(index) {
-    console.log('discarding');
+    // console.log('discarding');
     setLastState([deck, discard]);
 
     if (discard.length === 3) {
@@ -535,7 +505,7 @@ var DiscardList = function DiscardList(_ref) {
     ref: drop
   }, discard.length > 0 ? discard.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: cardID
+      key: "discard-".concat(itemType, "-").concat(cardID)
     }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
   }) : 'Drag here', lastState.length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
@@ -588,12 +558,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var Search = function Search(_ref) {
   var id = _ref.id,
-      cardsArray = _ref.cardsArray,
       cardsHash = _ref.cardsHash,
-      decks = _ref.decks,
-      setDecks = _ref.setDecks,
-      getter = _ref.getter,
-      setter = _ref.setter;
+      selectedDeck = _ref.selectedDeck,
+      setSelectedDeck = _ref.setSelectedDeck;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
@@ -606,12 +573,14 @@ var Search = function Search(_ref) {
       // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
 
       if (cardsHash[ui.item.value] !== undefined) {
-        setter(getter.concat([cardsHash[ui.item.value]])); // do not mutate
+        setSelectedDeck(selectedDeck.concat([cardsHash[ui.item.value]])); // do not mutate
+
+        console.log('lag?');
       }
 
       setSearchTerm('');
     });
-  }, [cardsHash, getter]); // cardsHash is initialized as an empty object and getter values change
+  }, [cardsHash, selectedDeck]); // cardsHash is initialized as an empty object and selectedDeck values change
   // useEffect(() => {
   //   console.log('searchTerm: ', searchTerm);
   // }, [searchTerm]);
@@ -629,7 +598,7 @@ var Search = function Search(_ref) {
     var formatted = searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1).toLowerCase(); // console.log('cleaned: ', formatted);
 
     if (cardsHash[formatted] !== undefined) {
-      setter(getter.concat([cardsHash[formatted]])); // do not mutate
+      setSelectedDeck(selectedDeck.concat([cardsHash[formatted]])); // do not mutate
     }
 
     setSearchTerm('');
@@ -736,12 +705,8 @@ var App = function App() {
     console.log('cardsArray: ', cardsArray);
     console.log('cardsHash: ', cardsHash);
   }, [cardsArray]);
-
-  var autocompleteSelected = function autocompleteSelected() {};
-
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, cardsArray.length === 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "file",
-    id: "file-selector",
     onChange: function onChange(event) {
       var fileList = event.target.files; // console.log('fileList: ', fileList);
 
@@ -752,14 +717,15 @@ var App = function App() {
       });
       fileReader.readAsText(fileList[0]);
     }
-  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BuildDeck__WEBPACK_IMPORTED_MODULE_1__["BuildDeck"], {
+  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "main"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BuildDeck__WEBPACK_IMPORTED_MODULE_1__["BuildDeck"], {
     cardsArray: cardsArray,
     cardsHash: cardsHash,
     decks: decks,
     setDecks: setDecks
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeckView__WEBPACK_IMPORTED_MODULE_2__["DeckView"], {
     cardsArray: cardsArray,
-    cardsHash: cardsHash,
     decks: decks,
     setDecks: setDecks
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BattleView__WEBPACK_IMPORTED_MODULE_3__["BattleView"], {

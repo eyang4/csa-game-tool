@@ -1,22 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-export const DeckView = (props) => {
+export const DeckView = ({ cardsArray, decks, setDecks }) => {
+
+  const removeDeck = (event) => {
+    setDecks(decks.slice(0, event.target.getAttribute('index')).concat(decks.slice(event.target.getAttribute('index') + 1)));
+  }
 
   return (
-    <div className='outline'>
+    <div>
       Decklist
-      {props.decks.map((deck, index) => {
+      {decks.map((deck, index) => {
         return (
-          <div key={deck[0]}>
+          <div key={`deckView-${deck[0]}-${index}`}>
             <div>
               {deck[0]}
-              {/* <button type='button' id={index} onClick={removeDeck}>x</button> */}
+              <button type='button' index={index} onClick={removeDeck}>x</button>
             </div>
             <div>
               {deck[1].map((cardID, index) => {
                 return (
-                  <div key={cardID}>
-                    {props.cardsArray[cardID - 1]["union"]} {props.cardsArray[cardID - 1]["name"]}
+                  <div key={index}>
+                    {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
                   </div>
                 );
               })}
