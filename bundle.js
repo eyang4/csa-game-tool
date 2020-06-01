@@ -470,6 +470,36 @@ var DiscardList = function DiscardList(_ref) {
       lastState = _useState2[0],
       setLastState = _useState2[1];
 
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      currentState = _useState4[0],
+      setCurrentState = _useState4[1];
+
+  var equals = function equals(arr1, arr2) {
+    var arr1Exists = !!arr1;
+    var arr2Exists = !!arr2;
+    if ((arr1Exists || arr2Exists) && !(arr1Exists && arr2Exists)) return false;
+    if (arr1.length !== arr2.length) return false;
+
+    for (var i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+
+    return true;
+  };
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    setCurrentState([deck, discard]);
+  }, []);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    // console.log('deck: ', deck, 'currentState[0]: ', currentState[0], 'discard: ', discard, 'currentState[1]: ', currentState[1]);
+    if (!equals(deck, currentState[0])) {
+      setLastState([]); // disable undo if deck changes outside of DiscardList
+
+      setCurrentState([deck, discard]);
+    }
+  }, [deck]);
+
   var _useDrop = Object(react_dnd__WEBPACK_IMPORTED_MODULE_1__["useDrop"])({
     accept: itemType,
     drop: function drop(item, monitor) {
@@ -487,9 +517,11 @@ var DiscardList = function DiscardList(_ref) {
     if (discard.length === 3) {
       var moveToDiscard = deck[index];
       var returnToDeck = discard[0];
+      setCurrentState([[returnToDeck].concat(deck.slice(0, index).concat(deck.slice(index + 1))), discard.slice(1).concat([moveToDiscard])]);
       setDiscard(discard.slice(1).concat([moveToDiscard]));
       setDeck([returnToDeck].concat(deck.slice(0, index).concat(deck.slice(index + 1))));
     } else {
+      setCurrentState([deck.slice(0, index).concat(deck.slice(index + 1)), discard.concat([deck[index]])]);
       setDiscard(discard.concat([deck[index]]));
       setDeck(deck.slice(0, index).concat(deck.slice(index + 1)));
     }
@@ -498,6 +530,7 @@ var DiscardList = function DiscardList(_ref) {
   var undo = function undo(event) {
     setDeck(lastState[0]);
     setDiscard(lastState[1]);
+    setCurrentState(lastState);
     setLastState([]);
   };
 
