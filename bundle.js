@@ -244,6 +244,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Search__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Search */ "./components/Search.js");
+/* harmony import */ var _Card__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Card */ "./components/Card.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -255,6 +256,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -293,8 +295,8 @@ var BuildDeck = function BuildDeck(_ref) {
     setCurrentDeck([]); // }
   };
 
-  var removeCard = function removeCard(event) {
-    setCurrentDeck(currentDeck.slice(0, parseInt(event.target.getAttribute('index'))).concat(currentDeck.slice(parseInt(event.target.getAttribute('index')) + 1)));
+  var removeCard = function removeCard(index, setDeck) {
+    setDeck(currentDeck.slice(0, index).concat(currentDeck.slice(index + 1)));
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_1__["Search"], {
@@ -314,13 +316,13 @@ var BuildDeck = function BuildDeck(_ref) {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "submit"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Card count: ", currentDeck.length), currentDeck.map(function (cardID, index) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: index
-    }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      type: "button",
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_2__["Card"], {
+      key: "card-builder-".concat(cardsArray[cardID - 1].name),
       index: index,
-      onClick: removeCard
-    }, "x"));
+      card: cardsArray[cardID - 1],
+      removeCard: removeCard,
+      setDeck: setCurrentDeck
+    });
   }));
 };
 
@@ -360,7 +362,7 @@ var Card = function Card(_ref) {
       removeCard = _ref.removeCard,
       setDeck = _ref.setDeck;
 
-  var _useDrag = Object(react_dnd__WEBPACK_IMPORTED_MODULE_1__["useDrag"])({
+  var _ref2 = !!itemType ? Object(react_dnd__WEBPACK_IMPORTED_MODULE_1__["useDrag"])({
     item: {
       type: itemType,
       index: index
@@ -370,9 +372,9 @@ var Card = function Card(_ref) {
     // begin: (monitor) => console.log('begin drag. monitor: ', monitor),
     // end: (item, monitor) => console.log('end drag. item: ', item, ', monitor: ', monitor),
 
-  }),
-      _useDrag2 = _slicedToArray(_useDrag, 2),
-      drag = _useDrag2[1];
+  }) : [,],
+      _ref3 = _slicedToArray(_ref2, 2),
+      drag = _ref3[1];
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     ref: drag,

@@ -3,14 +3,16 @@ import { useDrag } from 'react-dnd';
 
 export const Card = ({ index, card, itemType, removeCard, setDeck }) => {
 
-  const [, drag] = useDrag({
-    item: { type: itemType, index },
-    // collect: (monitor) => ({ // collector functions bundle up information using monitors
-    //   isDragging: monitor.isDragging(), // monitors expose the state of the current drag operation
-    // }),
-    // begin: (monitor) => console.log('begin drag. monitor: ', monitor),
-    // end: (item, monitor) => console.log('end drag. item: ', item, ', monitor: ', monitor),
-  });
+  const [, drag] = (!!itemType)
+    ? useDrag({
+      item: { type: itemType, index },
+      // collect: (monitor) => ({ // collector functions bundle up information using monitors
+      //   isDragging: monitor.isDragging(), // monitors expose the state of the current drag operation
+      // }),
+      // begin: (monitor) => console.log('begin drag. monitor: ', monitor),
+      // end: (item, monitor) => console.log('end drag. item: ', item, ', monitor: ', monitor),
+    })
+    : [,];
 
   return (
     <div ref={drag} className='highlight tooltip'>

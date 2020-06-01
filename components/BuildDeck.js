@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Search } from './Search';
+import { Card } from './Card';
 
 export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
   const [deckName, setDeckName] = useState('');
@@ -29,11 +30,11 @@ export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
     // }
   }
 
-  const removeCard = (event) => {
-    setCurrentDeck(
+  const removeCard = (index, setDeck) => {
+    setDeck(
       currentDeck
-        .slice(0, parseInt(event.target.getAttribute('index')))
-        .concat(currentDeck.slice(parseInt(event.target.getAttribute('index')) + 1))
+        .slice(0, index)
+        .concat(currentDeck.slice(index + 1))
     );
   }
 
@@ -48,10 +49,7 @@ export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
       <div>Card count: {currentDeck.length}</div>
       {currentDeck.map((cardID, index) => {
         return (
-          <div key={index}>
-            {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
-            <button type='button' index={index} onClick={removeCard}>x</button>
-          </div>
+          <Card key={`card-builder-${cardsArray[cardID - 1].name}`} index={index} card={cardsArray[cardID - 1]} removeCard={removeCard} setDeck={setCurrentDeck} />
         );
       })}
     </div>

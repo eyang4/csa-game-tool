@@ -86,8 +86,7 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
             Player deck
             {(activeDeck !== -1)
             ? playerDeck.map((cardID, index) => {
-                return (<Card key={`card-${ItemTypes.PLAYERCARD}-${cardsArray[cardID - 1].name}`} index={index} card={cardsArray[cardID - 1]} itemType={ItemTypes.PLAYERCARD} setDeck={setOpponentDeck} />
-                );
+                return (<Card key={`card-${ItemTypes.PLAYERCARD}-${cardsArray[cardID - 1].name}`} index={index} card={cardsArray[cardID - 1]} itemType={ItemTypes.PLAYERCARD} setDeck={setOpponentDeck} />);
               })
             : ''}
           </div>
