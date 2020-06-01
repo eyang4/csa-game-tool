@@ -572,21 +572,24 @@ var Search = function Search(_ref) {
       event.preventDefault(); // console.log('selected. id, event, ui: ', id, event, ui);
       // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
 
-      if (cardsHash[ui.item.value] !== undefined) {
-        setSelectedDeck(selectedDeck.concat([cardsHash[ui.item.value]])); // do not mutate
-
-        console.log('lag?');
-      }
-
-      setSearchTerm('');
+      update();
     });
-  }, [cardsHash, selectedDeck]); // cardsHash is initialized as an empty object and selectedDeck values change
-  // useEffect(() => {
+  }, []); // useEffect(() => {
   //   console.log('searchTerm: ', searchTerm);
   // }, [searchTerm]);
 
   var changeSearchTerm = function changeSearchTerm(event) {
     setSearchTerm(event.target.value);
+  };
+
+  var update = function update() {
+    if (cardsHash[ui.item.value] !== undefined) {
+      setSelectedDeck(selectedDeck.concat([cardsHash[ui.item.value]])); // do not mutate
+
+      console.log('lag?');
+    }
+
+    setSearchTerm('');
   };
 
   var search = function search(event) {
@@ -717,7 +720,7 @@ var App = function App() {
       });
       fileReader.readAsText(fileList[0]);
     }
-  }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }) : Object.entries(cardsHash).length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "main"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BuildDeck__WEBPACK_IMPORTED_MODULE_1__["BuildDeck"], {
     cardsArray: cardsArray,
@@ -733,7 +736,7 @@ var App = function App() {
     cardsHash: cardsHash,
     decks: decks,
     setDecks: setDecks
-  })));
+  })) : 'Processing JSON...');
 };
 
 /***/ }),

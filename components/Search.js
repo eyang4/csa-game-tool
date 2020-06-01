@@ -8,15 +8,9 @@ export const Search = ({ id, cardsHash, selectedDeck, setSelectedDeck }) => {
       event.preventDefault();
       // console.log('selected. id, event, ui: ', id, event, ui);
       // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
-      if (cardsHash[ui.item.value] !== undefined) {
-        setSelectedDeck(
-          selectedDeck.concat([ cardsHash[ui.item.value] ])
-        ); // do not mutate
-        console.log('lag?');
-      }
-      setSearchTerm('');
+      update();
     });
-  }, [cardsHash, selectedDeck]); // cardsHash is initialized as an empty object and selectedDeck values change
+  }, []);
 
   // useEffect(() => {
   //   console.log('searchTerm: ', searchTerm);
@@ -25,6 +19,16 @@ export const Search = ({ id, cardsHash, selectedDeck, setSelectedDeck }) => {
   const changeSearchTerm = (event) => {
     setSearchTerm(event.target.value);
   };
+
+  const update = () => {
+    if (cardsHash[ui.item.value] !== undefined) {
+      setSelectedDeck(
+        selectedDeck.concat([ cardsHash[ui.item.value] ])
+      ); // do not mutate
+      console.log('lag?');
+    }
+    setSearchTerm('');
+  }
 
   const search = (event) => {
     event.preventDefault();
