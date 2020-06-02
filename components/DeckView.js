@@ -52,6 +52,10 @@ export const DeckView = ({ cardsArray, decks, setDecks, activeDeck }) => {
     setDecks(importedData);
   }
 
+  const typedArrayToURL = (typedArray, mimeType) => {
+    return URL.createObjectURL(new Blob([typedArray], {type: mimeType}));
+  }
+
   return (
     <div>
       Decklist
@@ -76,7 +80,15 @@ export const DeckView = ({ cardsArray, decks, setDecks, activeDeck }) => {
         </div>
       : ''}
       {(exportVisible)
-      ? <textarea readOnly cols='30' wrap='hard' value={JSON.stringify(decks)}></textarea>
+      ? <div>
+          <p><textarea readOnly cols='30' wrap='hard' value={JSON.stringify(decks)}></textarea></p>
+          <p>- or -</p>
+          <p>
+            {(decks)
+              ? <a href={typedArrayToURL(JSON.stringify(decks), 'text/plain')} download='csa-decks'>Download</a>
+              : 'Preparing download...'}
+          </p>
+        </div>
       : ''}
       {decks.map((deck, index) => {
         return (

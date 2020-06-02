@@ -501,6 +501,12 @@ var DeckView = function DeckView(_ref) {
     setDecks(importedData);
   };
 
+  var typedArrayToURL = function typedArrayToURL(typedArray, mimeType) {
+    return URL.createObjectURL(new Blob([typedArray], {
+      type: mimeType
+    }));
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Decklist", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
     onClick: toggleImport
@@ -527,12 +533,15 @@ var DeckView = function DeckView(_ref) {
       });
       fileReader.readAsText(fileList[0]);
     }
-  })) : '', exportVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+  })) : '', exportVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
     readOnly: true,
     cols: "30",
     wrap: "hard",
     value: JSON.stringify(decks)
-  }) : '', decks.map(function (deck, index) {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "- or -"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, decks ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    href: typedArrayToURL(JSON.stringify(decks), 'text/plain'),
+    download: "csa-decks"
+  }, "Download") : 'Preparing download...')) : '', decks.map(function (deck, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: "deckView-".concat(deck[0], "-").concat(index)
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[0], index !== activeDeck ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
