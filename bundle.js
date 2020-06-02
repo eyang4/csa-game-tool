@@ -423,6 +423,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DeckView", function() { return DeckView; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 var DeckView = function DeckView(_ref) {
   var cardsArray = _ref.cardsArray,
@@ -430,14 +442,97 @@ var DeckView = function DeckView(_ref) {
       setDecks = _ref.setDecks,
       activeDeck = _ref.activeDeck;
 
-  // useEffect(() => {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      importVisible = _useState2[0],
+      setImportVisible = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      exportVisible = _useState4[0],
+      setExportVisible = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState6 = _slicedToArray(_useState5, 2),
+      importText = _useState6[0],
+      setImportText = _useState6[1]; // useEffect(() => {
   //   console.log('activeDeck: ', activeDeck);
   // }, [activeDeck])
+
+
   var removeDeck = function removeDeck(event) {
     setDecks(decks.slice(0, event.target.getAttribute('index')).concat(decks.slice(event.target.getAttribute('index') + 1)));
   };
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Decklist", decks.map(function (deck, index) {
+  var toggleImport = function toggleImport() {
+    if (exportVisible) setExportVisible(false);
+    if (importVisible) setImportVisible(false);else setImportVisible(true);
+  };
+
+  var toggleExport = function toggleExport() {
+    if (importVisible) setImportVisible(false);
+    if (exportVisible) setExportVisible(false);else setExportVisible(true);
+  };
+
+  var changeImportText = function changeImportText(event) {
+    setImportText(event.target.value);
+  };
+
+  var importDecks = function importDecks(event) {
+    event.preventDefault(); // console.log('importDecks: ', event, event.target.elements.importTextarea, event.target.elements.importTextarea.value);
+
+    var importedData = JSON.parse(event.target.elements.importTextarea.value);
+    validateImport(importedData);
+  };
+
+  var validateImport = function validateImport(importedData) {
+    if (!Array.isArray(importedData)) return false;
+
+    for (var i = 0; i < importedData.length; i++) {
+      if (!Array.isArray(importedData[i])) return false;
+      if (importedData[i].length > 2) return false;
+      if (typeof importedData[i][0] !== 'string') return false; // if (importedData[i][1].length > 11) return false;
+
+      for (var j = 1; j < importedData[i][1].length; j++) {
+        if (typeof importedData[i][1][j] !== 'number' || importedData[i][1][j] < 1 || importedData[i][1][j] > cardsArray.length) return false;
+      }
+    }
+
+    setDecks(importedData);
+  };
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Decklist", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    onClick: toggleImport
+  }, "Import"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    onClick: toggleExport
+  }, "Export"), importVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+    onSubmit: importDecks
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+    cols: "30",
+    wrap: "hard",
+    value: importText,
+    onChange: changeImportText,
+    name: "importTextarea"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "submit"
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "- or -"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    type: "file",
+    onChange: function onChange(event) {
+      var fileList = event.target.files;
+      var fileReader = new FileReader();
+      fileReader.addEventListener('load', function (event) {
+        validateImport(JSON.parse(fileReader.result));
+      });
+      fileReader.readAsText(fileList[0]);
+    }
+  })) : '', exportVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+    readOnly: true,
+    cols: "30",
+    wrap: "hard",
+    value: JSON.stringify(decks)
+  }) : '', decks.map(function (deck, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: "deckView-".concat(deck[0], "-").concat(index)
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[0], index !== activeDeck ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
