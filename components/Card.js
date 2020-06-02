@@ -21,20 +21,20 @@ export const Card = ({ index, card, itemType, removeCard, setDeck }) => {
       ? <button type='button' onClick={() => {removeCard(index, setDeck)}}>x</button>
       : ''}
       <span className='tooltipText'>
-        <b>Name:</b> {card.name}
-        <br /><b>Union:</b> {card.union}
-        <br /><b>Cost:</b> {(Object.keys(card.cost).length > 0)
+        <p><b>Name:</b> {card.name}</p>
+        <p><b>Union:</b> {card.union}</p>
+        <p><b>Ability:</b> {card.ability}</p>
+        <p><b>Cost:</b> {(Object.keys(card.cost).length > 0)
         ? (Object.keys(card.cost).length === 1)
-          ? <span>{Object.entries(card.cost)[0][1]} {Object.entries(card.cost)[0][0]}<br /></span>
+          ? <span>{Object.entries(card.cost)[0][1]} {Object.entries(card.cost)[0][0]}</span>
           : <ul>
               {Object.entries(card.cost).map((colorCost) => {
                 return <li>{colorCost[1]} {colorCost[0]}</li>;
               })}
             </ul>
-        : '-'}
-        <b>Ability:</b> {card.ability}
-        <br /><b>Power:</b> {card.power}
-        <br /><b>Rarity:</b> {card.rarity}
+        : '-'}</p>
+        <p><b>Power:</b> {card.power}</p>
+        <p><b>Rarity:</b> {card.rarity}</p>
       </span>
     </div>
   );
