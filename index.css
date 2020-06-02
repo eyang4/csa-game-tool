@@ -13,7 +13,6 @@ ul {
   /* normalize styling for unordered list */
   list-style-type: disc;
   margin: 0 0 0 0;
-  display: inline;
 }
 
 .highlight {
