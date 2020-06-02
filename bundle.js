@@ -127,32 +127,28 @@ var BattleView = function BattleView(_ref) {
   var cardsArray = _ref.cardsArray,
       cardsHash = _ref.cardsHash,
       decks = _ref.decks,
-      setDecks = _ref.setDecks;
+      activeDeck = _ref.activeDeck,
+      setActiveDeck = _ref.setActiveDeck;
 
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(-1),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
-      activeDeck = _useState2[0],
-      setActiveDeck = _useState2[1];
+      playerDeck = _useState2[0],
+      setPlayerDeck = _useState2[1];
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      playerDeck = _useState4[0],
-      setPlayerDeck = _useState4[1];
+      playerDiscard = _useState4[0],
+      setPlayerDiscard = _useState4[1];
 
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
-      playerDiscard = _useState6[0],
-      setPlayerDiscard = _useState6[1];
+      opponentDeck = _useState6[0],
+      setOpponentDeck = _useState6[1];
 
   var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState8 = _slicedToArray(_useState7, 2),
-      opponentDeck = _useState8[0],
-      setOpponentDeck = _useState8[1];
-
-  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
-      _useState10 = _slicedToArray(_useState9, 2),
-      opponentDiscard = _useState10[0],
-      setOpponentDiscard = _useState10[1];
+      opponentDiscard = _useState8[0],
+      setOpponentDiscard = _useState8[1];
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     // console.log('activeDeck: ', activeDeck);
@@ -171,7 +167,7 @@ var BattleView = function BattleView(_ref) {
   // }, [opponentDiscard]);
 
   var selectDeck = function selectDeck(event) {
-    setActiveDeck(event.target.getAttribute('index'));
+    setActiveDeck(parseInt(event.target.getAttribute('index')));
   };
 
   var removeCard = function removeCard(index, setDeck) {
@@ -409,7 +405,11 @@ __webpack_require__.r(__webpack_exports__);
 var DeckView = function DeckView(_ref) {
   var cardsArray = _ref.cardsArray,
       decks = _ref.decks,
-      setDecks = _ref.setDecks;
+      setDecks = _ref.setDecks,
+      activeDeck = _ref.activeDeck;
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    console.log(activeDeck);
+  }, [activeDeck]);
 
   var removeDeck = function removeDeck(event) {
     setDecks(decks.slice(0, event.target.getAttribute('index')).concat(decks.slice(event.target.getAttribute('index') + 1)));
@@ -418,11 +418,11 @@ var DeckView = function DeckView(_ref) {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Decklist", decks.map(function (deck, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: "deckView-".concat(deck[0], "-").concat(index)
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[0], /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[0], index !== activeDeck ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       type: "button",
       index: index,
       onClick: removeDeck
-    }, "x")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[1].map(function (cardID, index) {
+    }, "x") : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, deck[1].map(function (cardID, index) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: index
       }, cardsArray[cardID - 1]["union"], " ", cardsArray[cardID - 1]["name"]);
@@ -704,7 +704,12 @@ var App = function App() {
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
       decks = _useState6[0],
-      setDecks = _useState6[1]; // useEffect(() => {
+      setDecks = _useState6[1];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(-1),
+      _useState8 = _slicedToArray(_useState7, 2),
+      activeDeck = _useState8[0],
+      setActiveDeck = _useState8[1]; // useEffect(() => {
   //   console.log('decks: ', decks);
   // }, [decks]);
 
@@ -765,12 +770,14 @@ var App = function App() {
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeckView__WEBPACK_IMPORTED_MODULE_2__["DeckView"], {
     cardsArray: cardsArray,
     decks: decks,
+    activeDeck: activeDeck,
     setDecks: setDecks
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BattleView__WEBPACK_IMPORTED_MODULE_3__["BattleView"], {
     cardsArray: cardsArray,
     cardsHash: cardsHash,
     decks: decks,
-    setDecks: setDecks
+    activeDeck: activeDeck,
+    setActiveDeck: setActiveDeck
   })) : 'Processing JSON...');
 };
 

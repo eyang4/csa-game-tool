@@ -7,6 +7,7 @@ export const App = () => {
   const [cardsArray, setCardsArray] = useState([]);
   const [cardsHash, setCardsHash] = useState([]);
   const [decks, setDecks] = useState([]);
+  const [activeDeck, setActiveDeck] = useState(-1);
 
   // useEffect(() => {
   //   console.log('decks: ', decks);
@@ -60,8 +61,8 @@ export const App = () => {
       : (Object.entries(cardsHash).length > 0)
         ? <div id='main'>
             <BuildDeck cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
-            <DeckView cardsArray={cardsArray} decks={decks} setDecks={setDecks} />
-            <BattleView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
+            <DeckView cardsArray={cardsArray} decks={decks} activeDeck={activeDeck} setDecks={setDecks} />
+            <BattleView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} activeDeck={activeDeck} setActiveDeck={setActiveDeck}/>
           </div>
         : 'Processing JSON...'}
     </div>

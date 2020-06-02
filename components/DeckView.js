@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-export const DeckView = ({ cardsArray, decks, setDecks }) => {
+export const DeckView = ({ cardsArray, decks, setDecks, activeDeck }) => {
+
+  useEffect(() => {
+    console.log(activeDeck);
+  }, [activeDeck])
 
   const removeDeck = (event) => {
     setDecks(decks.slice(0, event.target.getAttribute('index')).concat(decks.slice(event.target.getAttribute('index') + 1)));
@@ -14,7 +18,9 @@ export const DeckView = ({ cardsArray, decks, setDecks }) => {
           <div key={`deckView-${deck[0]}-${index}`}>
             <div>
               {deck[0]}
-              <button type='button' index={index} onClick={removeDeck}>x</button>
+              {(index !== activeDeck)
+              ? <button type='button' index={index} onClick={removeDeck}>x</button>
+              : ''}
             </div>
             <div>
               {deck[1].map((cardID, index) => {

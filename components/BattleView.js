@@ -6,8 +6,7 @@ import { Search } from './Search';
 import { Card } from './Card';
 import { DiscardList } from './DiscardList';
 
-export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
-  const [activeDeck, setActiveDeck] = useState(-1);
+export const BattleView = ({ cardsArray, cardsHash, decks, activeDeck, setActiveDeck }) => {
   const [playerDeck, setPlayerDeck] = useState([]);
   const [playerDiscard, setPlayerDiscard] = useState([]);
   const [opponentDeck, setOpponentDeck] = useState([]);
@@ -35,7 +34,7 @@ export const BattleView = ({ cardsArray, cardsHash, decks, setDecks }) => {
   // }, [opponentDiscard]);
 
   const selectDeck = (event) => {
-    setActiveDeck(event.target.getAttribute('index'));
+    setActiveDeck(parseInt(event.target.getAttribute('index')));
   }
 
   const removeCard = (index, setDeck) => {
