@@ -457,7 +457,12 @@ var DeckView = function DeckView(_ref) {
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState6 = _slicedToArray(_useState5, 2),
       importText = _useState6[0],
-      setImportText = _useState6[1]; // useEffect(() => {
+      setImportText = _useState6[1];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      importError = _useState8[0],
+      setImportError = _useState8[1]; // useEffect(() => {
   //   console.log('activeDeck: ', activeDeck);
   // }, [activeDeck])
 
@@ -483,26 +488,35 @@ var DeckView = function DeckView(_ref) {
   var importDecks = function importDecks(event) {
     event.preventDefault(); // console.log('importDecks: ', event, event.target.elements.importTextarea, event.target.elements.importTextarea.value);
 
-    var importedData = JSON.parse(event.target.elements.importTextarea.value);
-    validateImport(importedData);
+    try {
+      var importedData = JSON.parse(event.target.elements.importTextarea.value);
+      validateImport(importedData);
+    } catch (error) {
+      setImportError(true);
+    }
   };
 
   var validateImport = function validateImport(importedData) {
-    if (!Array.isArray(importedData)) return false;
+    if (!Array.isArray(importedData)) return invalidImport();
 
     for (var i = 0; i < importedData.length; i++) {
-      if (!Array.isArray(importedData[i])) return false;
-      if (importedData[i].length > 2) return false;
-      if (typeof importedData[i][0] !== 'string') return false; // if (importedData[i][1].length > 11) return false;
+      if (!Array.isArray(importedData[i])) return invalidImport();
+      if (importedData[i].length > 2) return invalidImport();
+      if (typeof importedData[i][0] !== 'string') return invalidImport(); // if (importedData[i][1].length > 11) return invalidImport();
 
       for (var j = 1; j < importedData[i][1].length; j++) {
-        if (typeof importedData[i][1][j] !== 'number' || importedData[i][1][j] < 1 || importedData[i][1][j] > cardsArray.length) return false;
+        if (typeof importedData[i][1][j] !== 'number' || importedData[i][1][j] < 1 || importedData[i][1][j] > cardsArray.length) return invalidImport();
       }
     }
 
     setDecks(importedData);
     setImportText('');
     setImportVisible(false);
+  };
+
+  var invalidImport = function invalidImport() {
+    setImportError(true);
+    return false;
   };
 
   var typedArrayToURL = function typedArrayToURL(typedArray, mimeType) {
@@ -527,7 +541,7 @@ var DeckView = function DeckView(_ref) {
     name: "importTextarea"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "submit"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "- or -"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "- or -"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     type: "file",
     onChange: function onChange(event) {
       var fileList = event.target.files;
@@ -537,7 +551,7 @@ var DeckView = function DeckView(_ref) {
       });
       fileReader.readAsText(fileList[0]);
     }
-  })) : '', exportVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
+  })), importError ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "There was an import error. Please try again.") : '') : '', exportVisible ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
     readOnly: true,
     cols: "30",
     wrap: "hard",
