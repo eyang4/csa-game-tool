@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 export const Search = ({ id, cardsHash, selectedDeck, setSelectedDeck, autocompleteSource }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [autocompleteTerm, setAutocompleteTerm] = useState('');
 
   useEffect(() => {
     $(`#${id}-search-term`).autocomplete({
@@ -9,12 +10,12 @@ export const Search = ({ id, cardsHash, selectedDeck, setSelectedDeck, autocompl
       autoFocus: true,
       response: (event, ui) => {
         // console.log('response. event, ui: ', event, ui);
-        const term = event.target.defaultValue;
+        const term = event.target.defaultValue.toLowerCase();
         if (ui.content.length > 0) { // unnecessary to trim when no matches are returned
-          let searchResult = ui.content[ui.content.length - 1];
-          while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
-            ui.content.pop(); // must modify ui.content directly, cannot replace
-            searchResult = ui.content[ui.content.length - 1];
+          for (let i = ui.content.length - 1; i >= 0; i--) {
+            if (term !== ui.content[i].value.slice(0, term.length).toLowerCase()) {
+              ui.content.splice(i, 1);
+            }
           }
         }
       },
@@ -24,7 +25,9 @@ export const Search = ({ id, cardsHash, selectedDeck, setSelectedDeck, autocompl
         event.preventDefault();
         // console.log('selected. id, event, ui: ', id, event, ui);
         // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
-        update(ui);
+        setAutocompleteTerm(ui.item.value);
+        // selectedDeck from props does not keep in sync
+        // likely due to being set at time of select function definition
       },
     });
   }, []);
@@ -33,20 +36,34 @@ export const Search = ({ id, cardsHash, selectedDeck, setSelectedDeck, autocompl
   //   console.log('searchTerm: ', searchTerm);
   // }, [searchTerm]);
 
+  // useEffect(() => {
+  //   console.log('selectedDeck, useEffect: ', selectedDeck);
+  // }, [selectedDeck]);
+
+  useEffect(() => {
+    update(autocompleteTerm);
+  }, [autocompleteTerm]);
+
   const changeSearchTerm = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const update = (ui) => {
-    if (cardsHash[ui.item.value] !== undefined) {
+  const update = (autocompleteTerm) => {
+    // console.log('selectedDeck, update: ', getSelectedDeck());
+    if (cardsHash[autocompleteTerm] !== undefined) {
       setSelectedDeck(
-        selectedDeck.concat([ cardsHash[ui.item.value] ])
+        selectedDeck.concat([ cardsHash[autocompleteTerm] ])
       ); // do not mutate
     }
     setSearchTerm('');
   }
 
+  // const getSelectedDeck = () => {
+  //   return selectedDeck;
+  // }
+
   const search = (event) => {
+    // console.log('selectedDeck, search: ', getSelectedDeck());
     event.preventDefault();
     // console.log('event.target:', event.target[`${id}-search-term`].value);
     const searchTerm = event.target[`${id}-search-term`].value; // autocomplete does not trigger onChange

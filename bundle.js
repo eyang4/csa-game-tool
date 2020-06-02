@@ -608,22 +608,25 @@ var Search = function Search(_ref) {
       searchTerm = _useState2[0],
       setSearchTerm = _useState2[1];
 
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      autocompleteTerm = _useState4[0],
+      setAutocompleteTerm = _useState4[1];
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     $("#".concat(id, "-search-term")).autocomplete({
       source: autocompleteSource,
       autoFocus: true,
       response: function response(event, ui) {
         // console.log('response. event, ui: ', event, ui);
-        var term = event.target.defaultValue;
+        var term = event.target.defaultValue.toLowerCase();
 
         if (ui.content.length > 0) {
           // unnecessary to trim when no matches are returned
-          var searchResult = ui.content[ui.content.length - 1];
-
-          while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
-            ui.content.pop(); // must modify ui.content directly, cannot replace
-
-            searchResult = ui.content[ui.content.length - 1];
+          for (var i = ui.content.length - 1; i >= 0; i--) {
+            if (term !== ui.content[i].value.slice(0, term.length).toLowerCase()) {
+              ui.content.splice(i, 1);
+            }
           }
         }
       },
@@ -633,26 +636,39 @@ var Search = function Search(_ref) {
         event.preventDefault(); // console.log('selected. id, event, ui: ', id, event, ui);
         // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
 
-        update(ui);
+        setAutocompleteTerm(ui.item.value); // selectedDeck from props does not keep in sync
+        // likely due to being set at time of select function definition
       }
     });
   }, []); // useEffect(() => {
   //   console.log('searchTerm: ', searchTerm);
   // }, [searchTerm]);
+  // useEffect(() => {
+  //   console.log('selectedDeck, useEffect: ', selectedDeck);
+  // }, [selectedDeck]);
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    update(autocompleteTerm);
+  }, [autocompleteTerm]);
 
   var changeSearchTerm = function changeSearchTerm(event) {
     setSearchTerm(event.target.value);
   };
 
-  var update = function update(ui) {
-    if (cardsHash[ui.item.value] !== undefined) {
-      setSelectedDeck(selectedDeck.concat([cardsHash[ui.item.value]])); // do not mutate
+  var update = function update(autocompleteTerm) {
+    // console.log('selectedDeck, update: ', getSelectedDeck());
+    if (cardsHash[autocompleteTerm] !== undefined) {
+      setSelectedDeck(selectedDeck.concat([cardsHash[autocompleteTerm]])); // do not mutate
     }
 
     setSearchTerm('');
-  };
+  }; // const getSelectedDeck = () => {
+  //   return selectedDeck;
+  // }
+
 
   var search = function search(event) {
+    // console.log('selectedDeck, search: ', getSelectedDeck());
     event.preventDefault(); // console.log('event.target:', event.target[`${id}-search-term`].value);
 
     var searchTerm = event.target["".concat(id, "-search-term")].value; // autocomplete does not trigger onChange
