@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Card } from './Card';
 
 export const DeckView = ({ cardsArray, decks, setDecks, activeDeck }) => {
   const [importVisible, setImportVisible] = useState(false);
@@ -50,6 +51,8 @@ export const DeckView = ({ cardsArray, decks, setDecks, activeDeck }) => {
       }
     }
     setDecks(importedData);
+    setImportText('');
+    setImportVisible(false);
   }
 
   const typedArrayToURL = (typedArray, mimeType) => {
@@ -102,9 +105,7 @@ export const DeckView = ({ cardsArray, decks, setDecks, activeDeck }) => {
             <div>
               {deck[1].map((cardID, index) => {
                 return (
-                  <div key={index}>
-                    {cardsArray[cardID - 1]["union"]} {cardsArray[cardID - 1]["name"]}
-                  </div>
+                  <Card key={`card-deckview-${cardsArray[cardID - 1].name}`} index={index} card={cardsArray[cardID - 1]} />
                 );
               })}
             </div>
