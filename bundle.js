@@ -169,10 +169,21 @@ var BattleView = function BattleView(_ref) {
 
   var selectDeck = function selectDeck(event) {
     setActiveDeck(parseInt(event.target.getAttribute('index')));
+    setPlayerDiscard([]); // reset if another deck is selected
   };
 
   var removeCard = function removeCard(index, setDeck) {
     setDeck(opponentDeck.slice(0, index).concat(opponentDeck.slice(parseInt(index) + 1)));
+  };
+
+  var clearOpponent = function clearOpponent() {
+    setOpponentDeck([]);
+    setOpponentDiscard([]);
+  };
+
+  var resetPlayer = function resetPlayer() {
+    setPlayerDeck(decks[activeDeck][1]);
+    setPlayerDiscard([]);
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Select player deck", decks.map(function (deck, index) {
@@ -207,7 +218,10 @@ var BattleView = function BattleView(_ref) {
     discard: opponentDiscard,
     setDiscard: setOpponentDiscard,
     itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_3__["default"].OPPONENTCARD
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_1__["DndProvider"], {
+  })), opponentDeck.length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    onClick: clearOpponent
+  }, "Clear") : '')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_1__["DndProvider"], {
     backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_2__["default"]
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Player deck", activeDeck !== -1 ? playerDeck.map(function (cardID, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Card__WEBPACK_IMPORTED_MODULE_5__["Card"], {
@@ -224,7 +238,10 @@ var BattleView = function BattleView(_ref) {
     discard: playerDiscard,
     setDiscard: setPlayerDiscard,
     itemType: _ItemTypes__WEBPACK_IMPORTED_MODULE_3__["default"].PLAYERCARD
-  })))));
+  })), playerDiscard.length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    type: "button",
+    onClick: resetPlayer
+  }, "Reset") : '')));
 };
 
 /***/ }),

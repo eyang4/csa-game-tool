@@ -35,6 +35,7 @@ export const BattleView = ({ cardsArray, cardsHash, decks, activeDeck, setActive
 
   const selectDeck = (event) => {
     setActiveDeck(parseInt(event.target.getAttribute('index')));
+    setPlayerDiscard([]); // reset if another deck is selected
   }
 
   const removeCard = (index, setDeck) => {
@@ -43,6 +44,16 @@ export const BattleView = ({ cardsArray, cardsHash, decks, activeDeck, setActive
         .slice(0, index)
         .concat(opponentDeck.slice(parseInt(index) + 1))
       );
+  }
+
+  const clearOpponent = () => {
+    setOpponentDeck([]);
+    setOpponentDiscard([]);
+  }
+
+  const resetPlayer = () => {
+    setPlayerDeck(decks[activeDeck][1]);
+    setPlayerDiscard([]);
   }
 
   return (
@@ -76,6 +87,9 @@ export const BattleView = ({ cardsArray, cardsHash, decks, activeDeck, setActive
             Opponent discard
             <DiscardList cardsArray={cardsArray} deck={opponentDeck} setDeck={setOpponentDeck} discard={opponentDiscard} setDiscard={setOpponentDiscard} itemType={ItemTypes.OPPONENTCARD} />
           </div>
+          {(opponentDeck.length > 0)
+          ? <button type='button' onClick={clearOpponent}>Clear</button>
+          : ''}
         </div>
       </DndProvider>
 
@@ -93,6 +107,9 @@ export const BattleView = ({ cardsArray, cardsHash, decks, activeDeck, setActive
             Player discard
             <DiscardList cardsArray={cardsArray} deck={playerDeck} setDeck={setPlayerDeck} discard={playerDiscard} setDiscard={setPlayerDiscard} itemType={ItemTypes.PLAYERCARD} />
           </div>
+          {(playerDiscard.length > 0)
+          ? <button type='button' onClick={resetPlayer}>Reset</button>
+          : ''}
         </div>
       </DndProvider>
     </div>
