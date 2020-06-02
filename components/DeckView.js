@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 
 export const DeckView = ({ cardsArray, decks, setDecks, activeDeck }) => {
 
-  useEffect(() => {
-    console.log(activeDeck);
-  }, [activeDeck])
+  // useEffect(() => {
+  //   console.log('activeDeck: ', activeDeck);
+  // }, [activeDeck])
 
   const removeDeck = (event) => {
     setDecks(decks.slice(0, event.target.getAttribute('index')).concat(decks.slice(event.target.getAttribute('index') + 1)));

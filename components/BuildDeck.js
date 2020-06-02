@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Search } from './Search';
 import { Card } from './Card';
 
-export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
+export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks, autocompleteSource }) => {
   const [deckName, setDeckName] = useState('');
   const [currentDeck, setCurrentDeck] = useState([]);
 
@@ -40,7 +40,7 @@ export const BuildDeck = ({ cardsArray, cardsHash, decks, setDecks }) => {
 
   return (
     <div>
-      <Search id='addPlayerCards' cardsHash={cardsHash} selectedDeck={currentDeck} setSelectedDeck={setCurrentDeck} />
+      <Search id='addPlayerCards' cardsHash={cardsHash} selectedDeck={currentDeck} setSelectedDeck={setCurrentDeck} autocompleteSource={autocompleteSource} />
       <form onSubmit={saveDeck}>
         <label htmlFor='deck-name'>Deck Name: </label>
         <input type='text' id='deck-name' value={deckName} onChange={changeDeckName} />

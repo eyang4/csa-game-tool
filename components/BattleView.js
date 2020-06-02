@@ -6,7 +6,7 @@ import { Search } from './Search';
 import { Card } from './Card';
 import { DiscardList } from './DiscardList';
 
-export const BattleView = ({ cardsArray, cardsHash, decks, activeDeck, setActiveDeck }) => {
+export const BattleView = ({ cardsArray, cardsHash, decks, activeDeck, setActiveDeck, autocompleteSource }) => {
   const [playerDeck, setPlayerDeck] = useState([]);
   const [playerDiscard, setPlayerDiscard] = useState([]);
   const [opponentDeck, setOpponentDeck] = useState([]);
@@ -60,7 +60,7 @@ export const BattleView = ({ cardsArray, cardsHash, decks, activeDeck, setActive
       </div>
       <div>
         Add opponent cards
-        <Search id='addOpponentCards' cardsHash={cardsHash} selectedDeck={opponentDeck} setSelectedDeck={setOpponentDeck} />
+        <Search id='addOpponentCards' cardsHash={cardsHash} selectedDeck={opponentDeck} setSelectedDeck={setOpponentDeck} autocompleteSource={autocompleteSource} />
       </div>
       <DndProvider backend={Backend}>
         <div>

@@ -128,7 +128,8 @@ var BattleView = function BattleView(_ref) {
       cardsHash = _ref.cardsHash,
       decks = _ref.decks,
       activeDeck = _ref.activeDeck,
-      setActiveDeck = _ref.setActiveDeck;
+      setActiveDeck = _ref.setActiveDeck,
+      autocompleteSource = _ref.autocompleteSource;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -186,7 +187,8 @@ var BattleView = function BattleView(_ref) {
     id: "addOpponentCards",
     cardsHash: cardsHash,
     selectedDeck: opponentDeck,
-    setSelectedDeck: setOpponentDeck
+    setSelectedDeck: setOpponentDeck,
+    autocompleteSource: autocompleteSource
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_dnd__WEBPACK_IMPORTED_MODULE_1__["DndProvider"], {
     backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_2__["default"]
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Opponent deck", opponentDeck.length > 0 ? opponentDeck.map(function (cardID, index) {
@@ -260,7 +262,8 @@ var BuildDeck = function BuildDeck(_ref) {
   var cardsArray = _ref.cardsArray,
       cardsHash = _ref.cardsHash,
       decks = _ref.decks,
-      setDecks = _ref.setDecks;
+      setDecks = _ref.setDecks,
+      autocompleteSource = _ref.autocompleteSource;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
@@ -299,7 +302,8 @@ var BuildDeck = function BuildDeck(_ref) {
     id: "addPlayerCards",
     cardsHash: cardsHash,
     selectedDeck: currentDeck,
-    setSelectedDeck: setCurrentDeck
+    setSelectedDeck: setCurrentDeck,
+    autocompleteSource: autocompleteSource
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     onSubmit: saveDeck
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -408,10 +412,10 @@ var DeckView = function DeckView(_ref) {
       decks = _ref.decks,
       setDecks = _ref.setDecks,
       activeDeck = _ref.activeDeck;
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    console.log(activeDeck);
-  }, [activeDeck]);
 
+  // useEffect(() => {
+  //   console.log('activeDeck: ', activeDeck);
+  // }, [activeDeck])
   var removeDeck = function removeDeck(event) {
     setDecks(decks.slice(0, event.target.getAttribute('index')).concat(decks.slice(event.target.getAttribute('index') + 1)));
   };
@@ -596,7 +600,8 @@ var Search = function Search(_ref) {
   var id = _ref.id,
       cardsHash = _ref.cardsHash,
       selectedDeck = _ref.selectedDeck,
-      setSelectedDeck = _ref.setSelectedDeck;
+      setSelectedDeck = _ref.setSelectedDeck,
+      autocompleteSource = _ref.autocompleteSource;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(''),
       _useState2 = _slicedToArray(_useState, 2),
@@ -604,11 +609,32 @@ var Search = function Search(_ref) {
       setSearchTerm = _useState2[1];
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
-    $("#".concat(id, "-search-term")).on('autocompleteselect', function (event, ui) {
-      event.preventDefault(); // console.log('selected. id, event, ui: ', id, event, ui);
-      // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
+    $("#".concat(id, "-search-term")).autocomplete({
+      source: autocompleteSource,
+      autoFocus: true,
+      response: function response(event, ui) {
+        // console.log('response. event, ui: ', event, ui);
+        var term = event.target.defaultValue;
 
-      update();
+        if (ui.content.length > 0) {
+          // unnecessary to trim when no matches are returned
+          var searchResult = ui.content[ui.content.length - 1];
+
+          while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
+            ui.content.pop(); // must modify ui.content directly, cannot replace
+
+            searchResult = ui.content[ui.content.length - 1];
+          }
+        }
+      },
+      minLength: 0,
+      delay: 0,
+      select: function select(event, ui) {
+        event.preventDefault(); // console.log('selected. id, event, ui: ', id, event, ui);
+        // console.log(ui.item.value, cardsHash, cardsHash[ui.item.value]);
+
+        update(ui);
+      }
     });
   }, []); // useEffect(() => {
   //   console.log('searchTerm: ', searchTerm);
@@ -618,11 +644,9 @@ var Search = function Search(_ref) {
     setSearchTerm(event.target.value);
   };
 
-  var update = function update() {
+  var update = function update(ui) {
     if (cardsHash[ui.item.value] !== undefined) {
       setSelectedDeck(selectedDeck.concat([cardsHash[ui.item.value]])); // do not mutate
-
-      console.log('lag?');
     }
 
     setSearchTerm('');
@@ -704,13 +728,18 @@ var App = function App() {
 
   var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState6 = _slicedToArray(_useState5, 2),
-      decks = _useState6[0],
-      setDecks = _useState6[1];
+      autocompleteSource = _useState6[0],
+      setAutocompleteSource = _useState6[1];
 
-  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(-1),
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState8 = _slicedToArray(_useState7, 2),
-      activeDeck = _useState8[0],
-      setActiveDeck = _useState8[1]; // useEffect(() => {
+      decks = _useState8[0],
+      setDecks = _useState8[1];
+
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(-1),
+      _useState10 = _slicedToArray(_useState9, 2),
+      activeDeck = _useState10[0],
+      setActiveDeck = _useState10[1]; // useEffect(() => {
   //   console.log('decks: ', decks);
   // }, [decks]);
 
@@ -725,27 +754,7 @@ var App = function App() {
     }
 
     setCardsHash(cardsHash);
-    $('.searchTerm').autocomplete({
-      source: autocompleteSource,
-      autoFocus: true,
-      response: function response(event, ui) {
-        // console.log('response. event, ui: ', event, ui);
-        var term = event.target.defaultValue;
-
-        if (ui.content.length > 0) {
-          // unnecessary to trim when no matches are returned
-          var searchResult = ui.content[ui.content.length - 1];
-
-          while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
-            ui.content.pop(); // must modify ui.content directly, cannot replace
-
-            searchResult = ui.content[ui.content.length - 1];
-          }
-        }
-      },
-      minLength: 0,
-      delay: 0
-    });
+    setAutocompleteSource(autocompleteSource);
     console.log('cardsArray: ', cardsArray);
     console.log('cardsHash: ', cardsHash);
   }, [cardsArray]);
@@ -761,13 +770,14 @@ var App = function App() {
       });
       fileReader.readAsText(fileList[0]);
     }
-  }) : Object.entries(cardsHash).length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }) : Object.entries(cardsHash).length > 0 && autocompleteSource.length > 0 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     id: "main"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_BuildDeck__WEBPACK_IMPORTED_MODULE_1__["BuildDeck"], {
     cardsArray: cardsArray,
     cardsHash: cardsHash,
     decks: decks,
-    setDecks: setDecks
+    setDecks: setDecks,
+    autocompleteSource: autocompleteSource
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_DeckView__WEBPACK_IMPORTED_MODULE_2__["DeckView"], {
     cardsArray: cardsArray,
     decks: decks,
@@ -778,7 +788,8 @@ var App = function App() {
     cardsHash: cardsHash,
     decks: decks,
     activeDeck: activeDeck,
-    setActiveDeck: setActiveDeck
+    setActiveDeck: setActiveDeck,
+    autocompleteSource: autocompleteSource
   })) : 'Processing JSON...');
 };
 

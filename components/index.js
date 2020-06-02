@@ -6,6 +6,7 @@ import { BattleView } from './BattleView';
 export const App = () => {
   const [cardsArray, setCardsArray] = useState([]);
   const [cardsHash, setCardsHash] = useState([]);
+  const [autocompleteSource, setAutocompleteSource] = useState([]);
   const [decks, setDecks] = useState([]);
   const [activeDeck, setActiveDeck] = useState(-1);
 
@@ -21,24 +22,7 @@ export const App = () => {
       autocompleteSource.push(cardsArray[i]["name"]);
     }
     setCardsHash(cardsHash);
-
-    $('.searchTerm').autocomplete({
-      source: autocompleteSource,
-      autoFocus: true,
-      response: (event, ui) => {
-        // console.log('response. event, ui: ', event, ui);
-        const term = event.target.defaultValue;
-        if (ui.content.length > 0) { // unnecessary to trim when no matches are returned
-          let searchResult = ui.content[ui.content.length - 1];
-          while (searchResult.value.slice(0, term.length).toLowerCase() !== term.toLowerCase()) {
-            ui.content.pop(); // must modify ui.content directly, cannot replace
-            searchResult = ui.content[ui.content.length - 1];
-          }
-        }
-      },
-      minLength: 0,
-      delay: 0,
-    });
+    setAutocompleteSource(autocompleteSource);
 
     console.log('cardsArray: ', cardsArray);
     console.log('cardsHash: ', cardsHash);
@@ -58,11 +42,11 @@ export const App = () => {
           });
           fileReader.readAsText(fileList[0]);
         }} />
-      : (Object.entries(cardsHash).length > 0)
+      : (Object.entries(cardsHash).length > 0 && autocompleteSource.length > 0)
         ? <div id='main'>
-            <BuildDeck cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} />
+            <BuildDeck cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} setDecks={setDecks} autocompleteSource={autocompleteSource} />
             <DeckView cardsArray={cardsArray} decks={decks} activeDeck={activeDeck} setDecks={setDecks} />
-            <BattleView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} activeDeck={activeDeck} setActiveDeck={setActiveDeck}/>
+            <BattleView cardsArray={cardsArray} cardsHash={cardsHash} decks={decks} activeDeck={activeDeck} setActiveDeck={setActiveDeck} autocompleteSource={autocompleteSource} />
           </div>
         : 'Processing JSON...'}
     </div>
