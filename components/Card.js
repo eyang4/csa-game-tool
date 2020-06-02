@@ -15,8 +15,10 @@ export const Card = ({ index, card, itemType, removeCard, setDeck }) => {
     : [,];
 
   return (
-    <div ref={drag} className='highlight tooltip'>
-      {card.union} {card.name}
+    <div className='highlight tooltip'>
+      <span ref={drag}>
+        {card.union} {card.name}
+      </span>
       {(removeCard !== undefined)
       ? <button type='button' onClick={() => {removeCard(index, setDeck)}}>x</button>
       : ''}

@@ -373,9 +373,10 @@ var Card = function Card(_ref) {
       drag = _ref3[1];
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    ref: drag,
     className: "highlight tooltip"
-  }, card.union, " ", card.name, removeCard !== undefined ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    ref: drag
+  }, card.union, " ", card.name), removeCard !== undefined ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "button",
     onClick: function onClick() {
       removeCard(index, setDeck);
